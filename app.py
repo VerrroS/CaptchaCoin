@@ -24,7 +24,7 @@ class User(db.Model):
     mail = db.Column(db.String(100), nullable=False)
     key = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, name, email):
+    def __init__(self, name, mail, key):
         self.name = name
         self.mail = mail
         self.key = key
