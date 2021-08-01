@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
+from helpers import login_required
 
 # Configure application
 app = Flask(__name__)
