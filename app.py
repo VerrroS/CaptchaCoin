@@ -54,3 +54,15 @@ def register():
         db.session.commit()
         return render_template("register.html", key = key)
     return render_template("register.html")
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    session["user_id"] = None
+    return render_template("logout.html")
+
+
+@app.route("/work", methods=["GET", "POST"])
+@login_required
+def work():
+    return render_template("work.html")
