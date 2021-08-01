@@ -38,9 +38,16 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    #clear all sessions
+    session.clear()
+
     if request.method == "POST":
-        submit = request.form.get("key")
-        return render_template("login.html", submit = submit)
+        key = request.form.get("key")
+        user = db.session.execute('SELECT name, _id from user WHERE key = :key', {"key": key}).first()
+        if user is not None:
+            session["user_id"] = user[1]
+            return render_template("index.html", name = user[0])
+        return render_template("login.html", incorrect = True)
     return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
