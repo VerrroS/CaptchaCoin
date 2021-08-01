@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="post">
+        <h2>Register</h2>
+        <input type="text" name="name" placeholder="Name">
+        <input type="text" name="mail" placeholder="Mail">
+        <button type="submit" name="button">Generate Wallet Key</button>
+    </form>
+  <p>Your wallet key is {{key}}</p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <form action="/login" method="post">
+        <label>Enter your wallet key</label>
+        <input type="text" name="key">
+        <button type="submit" name="button">Login</button>
+    </form>
+
+    {{submit}}
+{% endblock %}
