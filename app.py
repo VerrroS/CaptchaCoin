@@ -32,8 +32,11 @@ class User(db.Model):
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 @app.route("/")
+@login_required
 def index():
-    return render_template("index.html")
+    # Get the users name if he is still logged in
+    name = db.session.execute("SELECT name from user WHERE _id = :id",{"id": session["user_id"]}).first()
+    return render_template("index.html", name = name[0])
 
 
 @app.route("/login", methods=["GET", "POST"])
