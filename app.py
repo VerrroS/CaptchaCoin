@@ -6,7 +6,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required
 from helpers import login_required, key_generator
 from captcha.image import ImageCaptcha
 import base64
