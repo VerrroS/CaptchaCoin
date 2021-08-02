@@ -5,11 +5,23 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <h2>Register</h2>
-        <input type="text" name="name" placeholder="Name">
-        <input type="text" name="mail" placeholder="Mail">
-        <button type="submit" name="button">Generate Wallet Key</button>
-    </form>
-  <p>Your wallet key is {{key}}</p>
+      {% if registered %}
+
+          <h2>Your wallet key</h2>
+          <p>{{key}}</p>
+          <p>Make sure to save the key at a secure place.</p>
+
+          <p>A confirmation mail was sent to your mail Account</p>
+          <a href="/login"><button>Login</button></a>
+
+      {% else %}
+
+          <form action="/register" method="post">
+              <h2>Register</h2>
+              <input type="text" name="name" placeholder="Name">
+              <input type="text" name="mail" placeholder="Mail">
+              <button type="submit" name="button">Generate Wallet Key</button>
+          </form>
+
+      {% endif %}
 {% endblock %}

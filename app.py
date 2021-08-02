@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
+from helpers import login_required
 
 # Configure application
 app = Flask(__name__)
@@ -23,7 +24,7 @@ class User(db.Model):
     mail = db.Column(db.String(100), nullable=False)
     key = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, name, email):
+    def __init__(self, name, mail, key):
         self.name = name
         self.mail = mail
         self.key = key
@@ -31,16 +32,31 @@ class User(db.Model):
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# Configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 @app.route("/")
+@login_required
 def index():
-    return render_template("index.html")
+    # Get the users name if he is still logged in
+    name = db.session.execute("SELECT name from user WHERE _id = :id",{"id": session["user_id"]}).first()
+    return render_template("index.html", name = name[0])
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    #clear all sessions
+    session.clear()
+
     if request.method == "POST":
-        submit = request.form.get("key")
-        return render_template("login.html", submit = submit)
+        key = request.form.get("key")
+        user = db.session.execute('SELECT name, _id from user WHERE key = :key', {"key": key}).first()
+        if user is not None:
+            session["user_id"] = user[1]
+            return render_template("index.html", name = user[0])
+        return render_template("login.html", incorrect = True)
     return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -54,3 +70,15 @@ def register():
         db.session.commit()
         return render_template("register.html", key = key)
     return render_template("register.html")
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    session["user_id"] = None
+    return render_template("logout.html")
+
+
+@app.route("/work", methods=["GET", "POST"])
+@login_required
+def work():
+    return render_template("work.html")

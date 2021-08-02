@@ -10,6 +10,9 @@
         <input type="text" name="key">
         <button type="submit" name="button">Login</button>
     </form>
+    {% if incorrect %}
+         <p>Sorry, your key is incorrect</p>
+         <button href="/register">Create Account</button>
+    {% endif %}
 
-    {{submit}}
 {% endblock %}
