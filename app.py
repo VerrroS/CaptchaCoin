@@ -83,10 +83,18 @@ def logout():
 #image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
 image = ImageCaptcha(width=250, height=100)
+# Initiate key
+key = None
+
 @app.route("/work", methods=["GET", "POST"])
 @login_required
 def work():
     return render_template("work.html")
+    # get current cash
+    cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
+    # acess global variable key and st it to random key
+    global key
+    key = key_generator()
     # Generate and write image
     data = image.generate(key)
     image.write(key, 'out.png')
