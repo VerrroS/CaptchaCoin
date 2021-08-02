@@ -33,6 +33,21 @@ class User(db.Model):
         self.key = key
         self.cash = cash
 
+class work(db.Model):
+    __tablename__ = 'work'
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer)
+    time = db.Column(db.Float)
+    success = db.Column(db.Boolean)
+    timestamp = db.Column(db.Numeric)
+
+    def __init__(self, user_id, time, success, timestamp):
+        self.user_id = user_id
+        self.time = time
+        self.success = success
+        self.timestamp = timestamp
+
+
 class Transactions(db.Model):
     __tablename__ = 'transactions'
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
