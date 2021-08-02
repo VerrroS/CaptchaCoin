@@ -49,11 +49,11 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 @app.route("/")
 @login_required
 def index():
     # Get the users name if he is still logged in
-    name = db.session.execute("SELECT name from user WHERE _id = :id",{"id": session["user_id"]}).first()
     name = db.session.execute('SELECT name from user WHERE _id = :id', {"id": session["user_id"]}).first()
     return render_template("index.html", name = name[0])
 
@@ -103,7 +103,6 @@ key = None
 @app.route("/work", methods=["GET", "POST"])
 @login_required
 def work():
-    return render_template("work.html")
     # get current cash
     cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
     # acess global variable key and st it to random key
