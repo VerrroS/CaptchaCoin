@@ -64,8 +64,9 @@ def register():
     if request.method == "POST":
         name = request.form.get("name")
         mail = request.form.get("mail")
+        cash = 0
         key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
-        new_data = User(name, mail, key)
+        new_data = User(name, mail, key, cash)
         db.session.add(new_data)
         db.session.commit()
         return render_template("register.html", key = key)
@@ -100,3 +101,15 @@ def work():
     image.write(key, 'out.png')
     encoded_img_data = base64.b64encode(data.getvalue())
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0])
+
+@app.route("/validate", methods=["GET", "POST"])
+def validate():
+        if request.method == "POST":
+            key_input = request.form.get('key').upper()
+            if key.upper() == key_input:
+                point = 1
+                db.session.execute("UPDATE user SET cash = cash + :point WHERE _id = :id", {"point": point, "id":session["user_id"] })
+                db.session.commit()
+            else:
+                print("NO POINT", key.upper(), key_input)
+        return redirect("/work")
