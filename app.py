@@ -54,6 +54,7 @@ Session(app)
 def index():
     # Get the users name if he is still logged in
     name = db.session.execute("SELECT name from user WHERE _id = :id",{"id": session["user_id"]}).first()
+    name = db.session.execute('SELECT name from user WHERE _id = :id', {"id": session["user_id"]}).first()
     return render_template("index.html", name = name[0])
 
 
