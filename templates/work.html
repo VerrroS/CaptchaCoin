@@ -9,15 +9,18 @@
         <button type="button" id="stats">Show Stats</button>
     </div>
 
-    <div class="hidden" id="stats_container">
+    <div class="inactive stats_container">
+      <p>Average Solving time</p>
+      <p>{{avg_time}} Seconds</p>
     </div>
     <div class="main">
+    <h2 class="p-3">Earn Captcha Coin here</h2>
     <h3>Current cash {{cash}}</h3>
-    <h2>Earn Captcha Coin here</h2>
+    <p>time of last solved captcha {{time}} seconds</p>
     <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="">
     <form action="validate" method="post">
-      <input type="text" name="key" autocomplete="off">
-      <input type="submit">
+      <input type="text" name="key" id="work_input" autocomplete="off">
+      <input type="submit" id="work_submit" name="time" >
     </form>
     </div>
 {% endblock %}
