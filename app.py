@@ -82,7 +82,7 @@ def register():
         new_data = User(name, mail, key, cash)
         db.session.add(new_data)
         db.session.commit()
-        return render_template("register.html", key = key)
+        return render_template("register.html", key = key, registered = True)
     return render_template("register.html")
 
 @app.route("/logout", methods=["GET"])
