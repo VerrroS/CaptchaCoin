@@ -78,7 +78,17 @@ def logout():
     return render_template("logout.html")
 
 
+# Configute Image Captcha
+# https://pypi.org/project/captcha/
+#image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
+# options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
+image = ImageCaptcha(width=250, height=100)
 @app.route("/work", methods=["GET", "POST"])
 @login_required
 def work():
     return render_template("work.html")
+    # Generate and write image
+    data = image.generate(key)
+    image.write(key, 'out.png')
+    encoded_img_data = base64.b64encode(data.getvalue())
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0])

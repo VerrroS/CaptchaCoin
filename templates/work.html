@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block main %}
+    <div class="btn">
+        <button type="button" id="stats">Show Stats</button>
+    </div>
 
+    <div class="hidden" id="stats_container">
+    </div>
+    <div class="main">
+    <h3>Current cash {{cash}}</h3>
     <h2>Earn Captcha Coin here</h2>
-
+    <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="">
+    <form action="validate" method="post">
+      <input type="text" name="key" autocomplete="off">
+      <input type="submit">
+    </form>
+    </div>
 {% endblock %}
