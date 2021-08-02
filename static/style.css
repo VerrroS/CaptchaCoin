@@ -1,0 +1,29 @@
+img {
+  margin: auto;
+}
+
+#stats_container {
+  background-color: grey;
+  min-width: 20vw;
+}
+
+.hidden {
+  display: none;
+}
+
+.container {
+  display: flex;
+}
+
+.btn {
+  position: absolute;
+}
+
+.main{
+  width: 100%;
+  text-align: center;
+  display: flex;
+  max-height: 70vh;
+  gap: 10px;
+  flex-direction: column;
+}
