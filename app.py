@@ -9,6 +9,7 @@ from datetime import datetime
 from helpers import login_required, key_generator
 from captcha.image import ImageCaptcha
 import base64
+import datetime;
 
 # Configure application
 app = Flask(__name__)
@@ -120,23 +121,31 @@ key = None
 def work():
     # get current cash
     cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
+    time = db.session.execute("SELECT time FROM work WHERE user_id = :id ORDER BY timestamp DESC", {"id": session["user_id"]}).first()
+    avg_time = db.session.execute("SELECT AVG(time) FROM work WHERE user_id = :id", {"id": session["user_id"]}).first()
+    if time is not None:
+        time = time[0]
     # acess global variable key and st it to random key
     global key
     key = key_generator()
     # Generate and write image
     data = image.generate(key)
-    image.write(key, 'out.png')
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0])
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0], time = time, avg_time = avg_time[0])
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
         if request.method == "POST":
+            ts = datetime.datetime.now().timestamp()
             key_input = request.form.get('key').upper()
+            time = request.form.get('time')
             if key.upper() == key_input:
                 point = 1
+                success = True
                 db.session.execute("UPDATE user SET cash = cash + :point WHERE _id = :id", {"point": point, "id":session["user_id"] })
                 db.session.commit()
             else:
-                print("NO POINT", key.upper(), key_input)
+                success = False
+        db.session.execute("INSERT INTO work (user_id, time, success, timestamp) VALUES (:user_id, :time, :success, :timestamp)", {"user_id":session["user_id"], "time":time, "success":success, "timestamp": ts})
+        db.session.commit()
         return redirect("/work")
