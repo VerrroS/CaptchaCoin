@@ -23,11 +23,21 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     mail = db.Column(db.String(100), nullable=False)
     key = db.Column(db.String(100), nullable=False)
+    cash = db.Column(db.Integer, default=0)
 
-    def __init__(self, name, mail, key):
+    def __init__(self, name, mail, key, cash):
         self.name = name
         self.mail = mail
         self.key = key
+        self.cash = cash
+
+class Transactions(db.Model):
+    __tablename__ = 'transactions'
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sender_id = db.Column(db.Integer, nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    receiver_id = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.Numeric, nullable=False)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
