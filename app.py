@@ -157,6 +157,38 @@ def validate():
         db.session.commit()
         return redirect("/work")
 
+@app.route("/transfer", methods=["GET", "POST"])
+@login_required
+def transfer():
+    sender_cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
+    if request.method == "POST":
+        ts = datetime.datetime.now().timestamp()
+        receiver = request.form.get("receiver")
+        amount = request.form.get("amount")
+        # if sender has not enough money
+        if float(amount) > float(sender_cash[0]):
+            return render_template("transfer.html", enough = False, cash = sender_cash[0])
+        # if receiver does not exist
+        if db.session.execute("SELECT COUNT(public_key) FROM user WHERE public_key = :public_key", {"public_key": receiver}).first()[0] < 1:
+            return render_template("transfer.html", receiver = False, cash = sender_cash[0])
+        receiver_id = db.session.execute("SELECT _id FROM user WHERE public_key = :receiver", {"receiver": receiver}).first()
+        # add money to receiver
+        db.session.execute("UPDATE user SET cash = cash + :amount WHERE public_key = :receiver", {"amount": amount, "receiver": receiver})
+        # remove money from sender
+        db.session.execute("UPDATE user SET cash = cash - :amount WHERE _id = :id", {"amount": amount, "id": session["user_id"]})
+        # make transactions entry
+        db.session.execute("INSERT INTO transactions (sender_id, receiver_id, amount, timestamp) VALUES(:sender_id, :receiver_id, :amount, :timestamp)",
+        {"sender_id": session["user_id"], "receiver_id": receiver_id[0] , "amount": amount, "timestamp": ts})
+        db.session.commit()
+        return render_template("transfer.html", success = True, cash = sender_cash[0]- int(amount))
+    return render_template("transfer.html", cash = sender_cash[0])
+
+@app.route("/blockchain", methods=["GET", "POST"])
+@login_required
+def blockchain():
+    # store data in table
+    table = db.session.execute("SELECT sender_id, receiver_id, amount, timestamp FROM transactions").all()
+    return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
 @login_required
