@@ -17,8 +17,8 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -107,7 +107,7 @@ def register():
         public_key = key_generator(10)
         # Check if keys are already in user
         # TO-DO check if this works
-        if User.query.filter_by(public_key = public_key).all() > 0 or  User.query.filter_by(key = key).all() > 0:
+        if public_key in User.query.filter_by(public_key = public_key).all() or  key in User.query.filter_by(key = key).all():
             return redirect("/register")
         new_data = User(name, mail, key, public_key, cash)
         db.session.add(new_data)
