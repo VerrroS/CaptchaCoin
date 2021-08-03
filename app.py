@@ -88,7 +88,7 @@ def login():
             session["user_id"] = user[1]
             return render_template("index.html", name = user[0])
         return render_template("login.html", incorrect = True)
-    return render_template("login.html")
+    return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
