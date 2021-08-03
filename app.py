@@ -81,7 +81,7 @@ Session(app)
 def index():
     # Get the users name if he is still logged in
     info = User.query.filter_by(_id = session["user_id"]).first()
-    return render_template("index.html", name = info.name, cash = info.cash, public_key = info.public_key)
+    return render_template("index.html", info = info)
 
 
 @app.route("/login", methods=["GET", "POST"])
