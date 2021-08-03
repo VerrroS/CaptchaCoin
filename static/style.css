@@ -1,0 +1,60 @@
+body{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+h1{
+    text-align: center;
+}
+
+#iamnotarobot{
+  width: 100%;
+  height: 100%;
+}
+
+img {
+  margin: auto;
+}
+
+.stats_container {
+  padding: 5px;
+  margin-top: 50px;
+  position: absolute;
+  left: 0;
+  background-color: grey;
+  min-width: 20vw;
+  color: white;
+  transition: left .5s;
+}
+
+.inactive {
+  left: -1000px;
+}
+
+.hello{
+  text-align: center;
+  margin: auto;
+}
+
+.btn {
+  align-self: flex-start;
+}
+
+.main{
+  width: 100%;
+  text-align: center;
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 4;
+  max-width: 100vw;
+  padding: 0;
+}

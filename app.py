@@ -6,14 +6,18 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required
+from helpers import login_required, key_generator
+from captcha.image import ImageCaptcha
+import base64
+import datetime;
 
 # Configure application
 app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test6.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -23,11 +27,36 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     mail = db.Column(db.String(100), nullable=False)
     key = db.Column(db.String(100), nullable=False)
+    cash = db.Column(db.Integer, default=0)
 
-    def __init__(self, name, mail, key):
+    def __init__(self, name, mail, key, cash):
         self.name = name
         self.mail = mail
         self.key = key
+        self.cash = cash
+
+class work(db.Model):
+    __tablename__ = 'work'
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer)
+    time = db.Column(db.Float)
+    success = db.Column(db.Boolean)
+    timestamp = db.Column(db.Numeric)
+
+    def __init__(self, user_id, time, success, timestamp):
+        self.user_id = user_id
+        self.time = time
+        self.success = success
+        self.timestamp = timestamp
+
+
+class Transactions(db.Model):
+    __tablename__ = 'transactions'
+    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sender_id = db.Column(db.Integer, nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    receiver_id = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.Numeric, nullable=False)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -37,11 +66,12 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 @app.route("/")
 @login_required
 def index():
     # Get the users name if he is still logged in
-    name = db.session.execute("SELECT name from user WHERE _id = :id",{"id": session["user_id"]}).first()
+    name = db.session.execute('SELECT name from user WHERE _id = :id', {"id": session["user_id"]}).first()
     return render_template("index.html", name = name[0])
 
 
@@ -64,11 +94,12 @@ def register():
     if request.method == "POST":
         name = request.form.get("name")
         mail = request.form.get("mail")
+        cash = 0
         key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
-        new_data = User(name, mail, key)
+        new_data = User(name, mail, key, cash)
         db.session.add(new_data)
         db.session.commit()
-        return render_template("register.html", key = key)
+        return render_template("register.html", key = key, registered = True)
     return render_template("register.html")
 
 @app.route("/logout", methods=["GET"])
@@ -78,7 +109,50 @@ def logout():
     return render_template("logout.html")
 
 
+# Configute Image Captcha
+# https://pypi.org/project/captcha/
+#image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
+# options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
+image = ImageCaptcha(width=250, height=100)
+# Initiate key
+key = None
+
 @app.route("/work", methods=["GET", "POST"])
 @login_required
 def work():
-    return render_template("work.html")
+    # get current cash
+    cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
+    time = db.session.execute("SELECT time FROM work WHERE user_id = :id ORDER BY timestamp DESC", {"id": session["user_id"]}).first()
+    avg_time = db.session.execute("SELECT AVG(time) FROM work WHERE user_id = :id", {"id": session["user_id"]}).first()
+    if time is not None:
+        time = time[0]
+    # acess global variable key and st it to random key
+    global key
+    key = key_generator()
+    # Generate and write image
+    data = image.generate(key)
+    encoded_img_data = base64.b64encode(data.getvalue())
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0], time = time, avg_time = avg_time[0])
+
+@app.route("/validate", methods=["GET", "POST"])
+def validate():
+        if request.method == "POST":
+            ts = datetime.datetime.now().timestamp()
+            key_input = request.form.get('key').upper()
+            time = request.form.get('time')
+            if key.upper() == key_input:
+                point = 1
+                success = True
+                db.session.execute("UPDATE user SET cash = cash + :point WHERE _id = :id", {"point": point, "id":session["user_id"] })
+                db.session.commit()
+            else:
+                success = False
+        db.session.execute("INSERT INTO work (user_id, time, success, timestamp) VALUES (:user_id, :time, :success, :timestamp)", {"user_id":session["user_id"], "time":time, "success":success, "timestamp": ts})
+        db.session.commit()
+        return redirect("/work")
+
+
+@app.route("/shop", methods=["GET", "POST"])
+@login_required
+def shop():
+    return render_template("shop.html")
