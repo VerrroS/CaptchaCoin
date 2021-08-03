@@ -101,8 +101,8 @@ def register():
         public_key = key_generator(10)
         # Check if keys are already in user
         # TO-DO check if this works
-        if public_key in db.session.execute("SELECT public_key FROM user").all() or key in db.session.execute("SELECT key FROM user").all():
-            return redirect("/register")
+        #if public_key in db.session.execute("SELECT public_key FROM user").all() or key in db.session.execute("SELECT key FROM user").all():
+            #return redirect("/register")
         new_data = User(name, mail, key, public_key, cash)
         db.session.add(new_data)
         db.session.commit()
