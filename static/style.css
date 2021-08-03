@@ -19,6 +19,18 @@ img {
   margin: auto;
 }
 
+.items img {
+  width: 100%;
+}
+
+.items {
+  display: grid;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 20vw 20vw;
+  margin: auto;
+}
+
 .stats_container {
   padding: 5px;
   margin-top: 50px;
