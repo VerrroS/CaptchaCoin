@@ -19,6 +19,18 @@ img {
   margin: auto;
 }
 
+.items img {
+  width: 100%;
+}
+
+.items {
+  display: grid;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 20vw 20vw;
+  margin: auto;
+}
+
 .stats_container {
   padding: 5px;
   margin-top: 50px;
@@ -39,6 +51,11 @@ img {
   margin: auto;
 }
 
+.point{
+  background-color: green;
+  position: absolute;
+}
+
 .btn {
   align-self: flex-start;
 }
@@ -55,6 +72,28 @@ img {
   display: flex;
   flex-direction: column;
   flex-grow: 4;
+  gap: 10px;
   max-width: 100vw;
   padding: 0;
+}
+
+
+.alert {
+  text-align: center;
+    color: black;
+    font-weight: bold;
+    font-size: x-large;
+    position: absolute;
+    z-index: -1;
+    width: 100vw;
+    border-color: #b8daff;
+    border-radius: 0;
+}
+
+.point {
+    background-color: #b6ffb6;
+}
+
+.no_point {
+    background-color: #faaeb5;
 }
