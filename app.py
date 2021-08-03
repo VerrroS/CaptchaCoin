@@ -151,8 +151,10 @@ def validate():
                 success = True
                 db.session.execute("UPDATE user SET cash = cash + :point WHERE _id = :id", {"point": point, "id":session["user_id"] })
                 db.session.commit()
+                flash('+1 Coin', 'point')
             else:
                 success = False
+                flash('try again', 'no_point')
         db.session.execute("INSERT INTO work (user_id, time, success, timestamp) VALUES (:user_id, :time, :success, :timestamp)", {"user_id":session["user_id"], "time":time, "success":success, "timestamp": ts})
         db.session.commit()
         return redirect("/work")

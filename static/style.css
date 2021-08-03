@@ -58,3 +58,24 @@ img {
   max-width: 100vw;
   padding: 0;
 }
+
+
+.alert {
+  text-align: center;
+    color: black;
+    font-weight: bold;
+    font-size: x-large;
+    position: absolute;
+    z-index: -1;
+    width: 100vw;
+    border-color: #b8daff;
+    border-radius: 0;
+}
+
+.point {
+    background-color: #b6ffb6;
+}
+
+.no_point {
+    background-color: #faaeb5;
+}
