@@ -17,8 +17,8 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -136,9 +136,12 @@ def work():
     # get current cash
     user = User.query.filter_by(_id = session["user_id"]).first()
     cash = user.cash
-    work = Work.query.filter_by(user_id = session["user_id"]).order_by(Work.timestamp.desc()).first()
-    time = work.time
-    avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()
+    work = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).first()
+    time = 0
+    avg_time = 0
+    if work is not None:
+        time = work.time
+        avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()
     # acess global variable key and st it to random key
     global key
     key = key_generator()
@@ -156,47 +159,50 @@ def validate():
             if key.upper() == key_input:
                 point = 1
                 success = True
-                db.session.execute("UPDATE user SET cash = cash + :point WHERE _id = :id", {"point": point, "id":session["user_id"] })
+                user = User.query.filter_by(_id = session["user_id"]).first()
+                user.cash = user.cash + point
                 db.session.commit()
                 flash('+1 Coin', 'point')
             else:
                 success = False
                 flash('try again', 'no_point')
-        db.session.execute("INSERT INTO work (user_id, time, success, timestamp) VALUES (:user_id, :time, :success, :timestamp)", {"user_id":session["user_id"], "time":time, "success":success, "timestamp": ts})
+        new_data = Work(session["user_id"],time, success, ts)
+        db.session.add(new_data)
         db.session.commit()
         return redirect("/work")
 
 @app.route("/transfer", methods=["GET", "POST"])
 @login_required
 def transfer():
-    sender_cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
+    user = User.query.filter_by(_id = session["user_id"]).first()
     if request.method == "POST":
         ts = datetime.datetime.now().timestamp()
         receiver = request.form.get("receiver")
-        amount = request.form.get("amount")
+        amount = int(request.form.get("amount"))
         # if sender has not enough money
-        if float(amount) > float(sender_cash[0]):
+        if float(amount) > float(user.cash):
             return render_template("transfer.html", enough = False, cash = sender_cash[0])
         # if receiver does not exist
-        if db.session.execute("SELECT COUNT(public_key) FROM user WHERE public_key = :public_key", {"public_key": receiver}).first()[0] < 1:
-            return render_template("transfer.html", receiver = False, cash = sender_cash[0])
-        receiver_id = db.session.execute("SELECT _id FROM user WHERE public_key = :receiver", {"receiver": receiver}).first()
+        receiver_info = User.query.filter_by(public_key = receiver).first()
+        if receiver_info is None:
+            return render_template("transfer.html", receiver = False, cash = user.cash)
+        receiver_id = receiver_info._id
         # add money to receiver
-        db.session.execute("UPDATE user SET cash = cash + :amount WHERE public_key = :receiver", {"amount": amount, "receiver": receiver})
+        receiver_info.cash = receiver_info.cash + amount
         # remove money from sender
-        db.session.execute("UPDATE user SET cash = cash - :amount WHERE _id = :id", {"amount": amount, "id": session["user_id"]})
+        user.cash = user.cash - amount
         # make transactions entry
-        db.session.execute("INSERT INTO transactions (sender_id, receiver_id, amount, timestamp) VALUES(:sender_id, :receiver_id, :amount, :timestamp)",
-        {"sender_id": session["user_id"], "receiver_id": receiver_id[0] , "amount": amount, "timestamp": ts})
+        new_data = Transactions(session["user_id"], amount, receiver_id, ts)
+        db.session.add(new_data)
         db.session.commit()
-        return render_template("transfer.html", success = True, cash = sender_cash[0]- int(amount))
-    return render_template("transfer.html", cash = sender_cash[0])
+        return render_template("transfer.html", success = True, cash = user.cash - amount)
+    return render_template("transfer.html", cash = user.cash)
 
 @app.route("/blockchain", methods=["GET", "POST"])
 @login_required
 def blockchain():
     # store data in table
-    table = db.session.execute("SELECT sender_id, receiver_id, amount, timestamp FROM transactions").all()
+    table = Transactions.query.all()
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
