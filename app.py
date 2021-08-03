@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_session import Session
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -37,7 +38,7 @@ class User(db.Model):
         self.cash = cash
         self.public_key = public_key
 
-class work(db.Model):
+class Work(db.Model):
     __tablename__ = 'work'
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer)
@@ -60,6 +61,12 @@ class Transactions(db.Model):
     receiver_id = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.Numeric, nullable=False)
 
+    def __init__(self, sender_id, amount, receiver_id, timestamp):
+        self.sender_id = sender_id
+        self.amount = amount
+        self.receiver_id = receiver_id
+        self.timestamp = timestamp
+
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -73,8 +80,8 @@ Session(app)
 @login_required
 def index():
     # Get the users name if he is still logged in
-    info = db.session.execute('SELECT name, cash, public_key from user WHERE _id = :id', {"id": session["user_id"]}).first()
-    return render_template("index.html", name = info[0], cash = info[1], public_key = info[2])
+    info = User.query.filter_by(_id = session["user_id"]).first()
+    return render_template("index.html", name = info.name, cash = info.cash, public_key = info.public_key)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -83,10 +90,9 @@ def login():
     session.clear()
     if request.method == "POST":
         key = request.form.get("key")
-        user = db.session.execute('SELECT name, _id from user WHERE key = :key', {"key": key}).first()
-        print("USER", user)
+        user = User.query.filter_by(key=key).first()
         if user is not None:
-            session["user_id"] = user[1]
+            session["user_id"] = user._id
             return redirect("/")
         return render_template("login.html", incorrect = True)
     return render_template("login.html")
@@ -101,8 +107,8 @@ def register():
         public_key = key_generator(10)
         # Check if keys are already in user
         # TO-DO check if this works
-        #if public_key in db.session.execute("SELECT public_key FROM user").all() or key in db.session.execute("SELECT key FROM user").all():
-            #return redirect("/register")
+        if User.query.filter_by(public_key = public_key).all() > 0 or  User.query.filter_by(key = key).all() > 0:
+            return redirect("/register")
         new_data = User(name, mail, key, public_key, cash)
         db.session.add(new_data)
         db.session.commit()
@@ -128,18 +134,18 @@ key = None
 @login_required
 def work():
     # get current cash
-    cash = db.session.execute("SELECT cash FROM user WHERE _id = :id", {"id": session["user_id"]}).first()
-    time = db.session.execute("SELECT time FROM work WHERE user_id = :id ORDER BY timestamp DESC", {"id": session["user_id"]}).first()
-    avg_time = db.session.execute("SELECT AVG(time) FROM work WHERE user_id = :id", {"id": session["user_id"]}).first()
-    if time is not None:
-        time = time[0]
+    user = User.query.filter_by(_id = session["user_id"]).first()
+    cash = user.cash
+    work = Work.query.filter_by(user_id = session["user_id"]).order_by(Work.timestamp.desc()).first()
+    time = work.time
+    avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()
     # acess global variable key and st it to random key
     global key
     key = key_generator()
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0], time = time, avg_time = round(avg_time[0], 2))
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time[0], 2))
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
