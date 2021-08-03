@@ -20,7 +20,9 @@ h1{
   min-height: 300px;
   background-repeat: no-repeat;
   background-size: contain;
+  background-position: center;
 }
+
 
 img {
   margin: auto;
@@ -28,6 +30,22 @@ img {
 
 .items img {
   width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.item{
+  border-radius: 10px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+.items .item:hover {
+  margin-top: -5px;
+}
+
+input[type=number]{
+  width: 6vw;
 }
 
 .items {
@@ -43,7 +61,7 @@ img {
   margin-top: 50px;
   position: absolute;
   left: 0;
-  background-color: grey;
+  background-color: #6c757d;
   min-width: 20vw;
   color: white;
   transition: left .5s;
@@ -104,4 +122,10 @@ img {
 
 .no_point {
     background-color: #faaeb5;
+}
+
+#captcha{
+
+    box-shadow: 0px 0px 4px 1px #0000003d;
+
 }
