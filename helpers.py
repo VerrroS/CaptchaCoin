@@ -3,7 +3,7 @@ from flask import request, redirect, url_for, session
 from flask_session import Session
 import string
 import random
-
+from datetime import datetime as dt
 
 # Use decorator function to ensure that login is required
 #https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
@@ -19,3 +19,8 @@ def login_required(f):
 #random key generator found here https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits
 def key_generator(size=7, chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def datetime(value):
+    """Format timestap into readable valus"""
+    return dt.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
