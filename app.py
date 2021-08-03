@@ -7,18 +7,18 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator
+from helpers import login_required, key_generator, datetime
 from captcha.image import ImageCaptcha
 import base64
-import datetime;
+from datetime import datetime as dt
 
 # Configure application
 app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -153,7 +153,7 @@ def work():
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
         if request.method == "POST":
-            ts = datetime.datetime.now().timestamp()
+            ts = dt.now().timestamp()
             key_input = request.form.get('key').upper()
             time = request.form.get('time')
             if key.upper() == key_input:
@@ -176,7 +176,7 @@ def validate():
 def transfer():
     user = User.query.filter_by(_id = session["user_id"]).first()
     if request.method == "POST":
-        ts = datetime.datetime.now().timestamp()
+        ts = dt.now().timestamp()
         receiver = request.form.get("receiver")
         amount = int(request.form.get("amount"))
         # if sender has not enough money
@@ -209,3 +209,7 @@ def blockchain():
 @login_required
 def shop():
     return render_template("shop.html")
+
+
+# Custom filter
+app.jinja_env.filters["datetime"] = datetime
