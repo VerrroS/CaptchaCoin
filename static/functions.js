@@ -3,6 +3,9 @@ const stats_container = document.querySelector(".stats_container");
 const work_input = document.querySelector("#work_input");
 const work_submit = document.querySelector("#work_submit")
 
+
+$('.robot_ripples').ripples();
+
 function open_stats()
 {
   if (stats_container.classList.contains("inactive"))
