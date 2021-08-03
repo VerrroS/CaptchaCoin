@@ -16,7 +16,8 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test6.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -149,3 +150,9 @@ def validate():
         db.session.execute("INSERT INTO work (user_id, time, success, timestamp) VALUES (:user_id, :time, :success, :timestamp)", {"user_id":session["user_id"], "time":time, "success":success, "timestamp": ts})
         db.session.commit()
         return redirect("/work")
+
+
+@app.route("/shop", methods=["GET", "POST"])
+@login_required
+def shop():
+    return render_template("shop.html")
