@@ -5,12 +5,15 @@
 {% endblock %}
 
 {% block main %}
-    <img src="/static/robot.png" id="iamnotarobot">
+    <div id="robot_ripples"></div>
+
     <div class="hello">
-        <h1>Hello {{name}}</h1>
-        <p>Your last work session was {{timestamp}}</p>
-        <p>Current status {{cash}} Coins</p>
-        <p>Public key: {{public_key}}</p>
+        <h1>Hello {{info.name}}</h1>
+        <p>Current status: {{info.cash}} Coins</p>
+        <p>Public key: {{info.public_key}}</p>
         <a href="/work"><button>Go to work</button></a>
     </div>
 {% endblock %}
+
+
+<!--    <img src="/static/robot.png" id="iamnotarobot">-->
