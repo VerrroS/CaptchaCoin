@@ -17,8 +17,8 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -141,14 +141,14 @@ def work():
     avg_time = 0
     if work is not None:
         time = work.time
-        avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()
+        avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
     # acess global variable key and st it to random key
     global key
     key = key_generator()
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time[0], 2))
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2))
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
