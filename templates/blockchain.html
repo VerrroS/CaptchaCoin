@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Blockchain
+{% endblock %}
+
+{% block main %}
+    <h2>Blockchain</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Sender</th>
+          <th>Receiver</th>
+          <th>Amount</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for row in table %}
+              <tr>
+                  <td>{{row['sender_id']}}</td>
+                  <td>{{row['receiver_id']}}</td>
+                  <td>{{row['amount']}}</td>
+                  <td>{{row['timestamp']}}</td>
+               </tr>
+          {% endfor %}
+      </tbody>
+
+    </table>
+{% endblock %}
