@@ -27,13 +27,15 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     mail = db.Column(db.String(100), nullable=False)
     key = db.Column(db.String(100), nullable=False)
+    public_key = db.Column(db.String(100), nullable=False)
     cash = db.Column(db.Integer, default=0)
 
-    def __init__(self, name, mail, key, cash):
+    def __init__(self, name, mail, key, public_key, cash):
         self.name = name
         self.mail = mail
         self.key = key
         self.cash = cash
+        self.public_key = public_key
 
 class work(db.Model):
     __tablename__ = 'work'
@@ -71,15 +73,14 @@ Session(app)
 @login_required
 def index():
     # Get the users name if he is still logged in
-    name = db.session.execute('SELECT name from user WHERE _id = :id', {"id": session["user_id"]}).first()
-    return render_template("index.html", name = name[0])
+    info = db.session.execute('SELECT name, cash, public_key from user WHERE _id = :id', {"id": session["user_id"]}).first()
+    return render_template("index.html", name = info[0], cash = info[1], public_key = info[2])
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     #clear all sessions
     session.clear()
-
     if request.method == "POST":
         key = request.form.get("key")
         user = db.session.execute('SELECT name, _id from user WHERE key = :key', {"key": key}).first()
@@ -96,10 +97,15 @@ def register():
         mail = request.form.get("mail")
         cash = 0
         key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
-        new_data = User(name, mail, key, cash)
+        public_key = key_generator(10)
+        # Check if keys are already in user
+        # TO-DO check if this works
+        if public_key in db.session.execute("SELECT public_key FROM user").all() or key in db.session.execute("SELECT key FROM user").all():
+            return redirect("/register")
+        new_data = User(name, mail, key, public_key, cash)
         db.session.add(new_data)
         db.session.commit()
-        return render_template("register.html", key = key, registered = True)
+        return render_template("register.html", key = key, registered = True, public_key = public_key)
     return render_template("register.html")
 
 @app.route("/logout", methods=["GET"])
