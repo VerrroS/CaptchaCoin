@@ -10,8 +10,8 @@
     <div class="hello">
         <h1>Hello {{info.name}}</h1>
         <p>Current status: {{info.cash}} Coins</p>
-        <p>Public key: {{info.public_key}}</p>
-        <a href="/work"><button>Go to work</button></a>
+        <p>Public key: <span class="bg-dark text-light p-1">{{info.public_key}}</span></p>
+        <a href="/work"><button class="btn btn-secondary">Go to work</button></a>
     </div>
 {% endblock %}
 

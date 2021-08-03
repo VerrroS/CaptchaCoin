@@ -8,11 +8,11 @@
     <form action="/login" method="post">
         <label>Enter your wallet key</label>
         <input type="text" name="key">
-        <button type="submit" name="button">Login</button>
+        <button type="submit" name="button" class="btn btn-secondary">Login</button>
     </form>
     {% if incorrect %}
          <p>Sorry, your key is incorrect</p>
-         <button href="/register">Create Account</button>
+         <button href="/register" class="btn btn-secondary">Create Account</button>
     {% endif %}
 
 {% endblock %}
