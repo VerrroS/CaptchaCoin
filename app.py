@@ -16,8 +16,8 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test6.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 db = SQLAlchemy(app)
 
@@ -84,11 +84,12 @@ def login():
     if request.method == "POST":
         key = request.form.get("key")
         user = db.session.execute('SELECT name, _id from user WHERE key = :key', {"key": key}).first()
+        print("USER", user)
         if user is not None:
             session["user_id"] = user[1]
-            return render_template("index.html", name = user[0])
+            return redirect("/")
         return render_template("login.html", incorrect = True)
-    return redirect("/")
+    return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
