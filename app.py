@@ -138,7 +138,7 @@ def work():
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0], time = time, avg_time = avg_time[0])
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash[0], time = time, avg_time = round(avg_time[0], 2))
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
