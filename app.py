@@ -7,10 +7,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator
+from helpers import login_required, key_generator, datetime, dollar, coins
 from captcha.image import ImageCaptcha
 import base64
-import datetime;
+from datetime import datetime as dt
 
 # Configure application
 app = Flask(__name__)
@@ -66,6 +66,8 @@ class Transactions(db.Model):
         self.amount = amount
         self.receiver_id = receiver_id
         self.timestamp = timestamp
+        self.sender_name = None
+        self.receiver_name = None
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -81,7 +83,7 @@ Session(app)
 def index():
     # Get the users name if he is still logged in
     info = User.query.filter_by(_id = session["user_id"]).first()
-    return render_template("index.html", name = info.name, cash = info.cash, public_key = info.public_key)
+    return render_template("index.html", info = info)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -126,7 +128,7 @@ def logout():
 # https://pypi.org/project/captcha/
 #image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
-image = ImageCaptcha(width=250, height=100)
+image = ImageCaptcha(width=350, height=200)
 # Initiate key
 key = None
 
@@ -139,21 +141,30 @@ def work():
     work = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).first()
     time = 0
     avg_time = 0
+    sucess_rate = 0
     if work is not None:
         time = work.time
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
+        work_all =  Work.query.all()
+        success_count = 0
+        for row in work_all:
+            if row.success == True:
+                success_count += 1
+        sucess_rate = round(((success_count/ len(work_all))*100), 2)
+
     # acess global variable key and st it to random key
     global key
-    key = key_generator()
+    key = key_generator(5)
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2))
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
+
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
         if request.method == "POST":
-            ts = datetime.datetime.now().timestamp()
+            ts = dt.now().timestamp()
             key_input = request.form.get('key').upper()
             time = request.form.get('time')
             if key.upper() == key_input:
@@ -176,7 +187,7 @@ def validate():
 def transfer():
     user = User.query.filter_by(_id = session["user_id"]).first()
     if request.method == "POST":
-        ts = datetime.datetime.now().timestamp()
+        ts = dt.now().timestamp()
         receiver = request.form.get("receiver")
         amount = int(request.form.get("amount"))
         # if sender has not enough money
@@ -203,9 +214,22 @@ def transfer():
 def blockchain():
     # store data in table
     table = Transactions.query.all()
+    for row in table:
+        row.sender_name = User.query.filter_by(_id = row.sender_id).first().name
+        row.receiver_name = User.query.filter_by(_id = row.receiver_id).first().name
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
 @login_required
 def shop():
     return render_template("shop.html")
+
+@app.route("/about", methods=["GET", "POST"])
+def about():
+    return render_template("about.html")
+
+
+# Custom filter
+app.jinja_env.filters["datetime"] = datetime
+app.jinja_env.filters["dollar"] = dollar
+app.jinja_env.filters["coins"] = coins

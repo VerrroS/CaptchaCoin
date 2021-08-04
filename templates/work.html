@@ -6,12 +6,20 @@
 
 {% block main %}
     <div class="btn">
-        <button type="button" id="stats">Show Stats</button>
+        <button type="button" id="stats" class="btn btn-secondary">Show Stats</button>
     </div>
 
     <div class="inactive stats_container">
-      <p>Average Solving time</p>
-      <p>{{avg_time}} Seconds</p>
+      <p>
+        Average solving time
+        <br>
+        {{avg_time}} Seconds
+      </p>
+      <p>
+        Average sucess rate
+        <br>
+        {{sucess_rate}}%
+      </p>
     </div>
 
     {% for category, message in get_flashed_messages(with_categories=True) %}
@@ -20,12 +28,37 @@
 
     <div class="main">
     <h2 class="p-3">Earn Captcha Coin here</h2>
-    <h3>Current cash {{cash}}</h3>
+    <h3>Current cash {{cash}} Coins</h3>
+    <h4>{{cash | dollar}}</h4>
     <p>time of last solved captcha {{time}} seconds</p>
     <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="">
     <form action="validate" method="post">
       <input type="text" name="key" id="work_input" autocomplete="off">
-      <input type="submit" id="work_submit" name="time" >
+      <input type="submit" id="work_submit" name="time" class="btn btn-secondary btn-sm">
     </form>
     </div>
+    <script type="text/javascript">
+
+      const captcha = document.querySelector("#captcha");
+      const alert = document.querySelector(".alert");
+
+      function position_alert()
+      {
+         captcha_coords = captcha.getBoundingClientRect()
+         alert_coords = alert.getBoundingClientRect()
+
+         const coords = {
+         	top: captcha_coords.top - (alert_coords.width/2),
+         	left: captcha_coords.left - (alert_coords.width/2)
+         }
+
+         alert.style.setProperty('top', `${coords.top}px`);
+         alert.style.setProperty('left', `${coords.left}px`);
+      }
+
+      position_alert();
+
+      window.addEventListener('resize', position_alert);
+
+    </script>
 {% endblock %}
