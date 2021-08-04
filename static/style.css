@@ -23,6 +23,13 @@ h1{
   background-position: center;
 }
 
+.header {
+  background-image: url(/static/workstation.svg);
+  width: 100vw;
+  height: 40vh;
+  background-position: center;
+  background-size: cover;
+}
 
 img {
   margin: auto;
