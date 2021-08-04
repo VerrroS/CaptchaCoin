@@ -29,6 +29,7 @@
     <div class="main">
     <h2 class="p-3">Earn Captcha Coin here</h2>
     <h3>Current cash {{cash}} Coins</h3>
+    <h4>{{cash | dollar}}</h4>
     <p>time of last solved captcha {{time}} seconds</p>
     <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="">
     <form action="validate" method="post">
@@ -37,6 +38,27 @@
     </form>
     </div>
     <script type="text/javascript">
-      $('#robot_ripples').ripples();
+
+      const captcha = document.querySelector("#captcha");
+      const alert = document.querySelector(".alert");
+
+      function position_alert()
+      {
+         captcha_coords = captcha.getBoundingClientRect()
+         alert_coords = alert.getBoundingClientRect()
+
+         const coords = {
+         	top: captcha_coords.top - (alert_coords.width/2),
+         	left: captcha_coords.left - (alert_coords.width/2)
+         }
+
+         alert.style.setProperty('top', `${coords.top}px`);
+         alert.style.setProperty('left', `${coords.left}px`);
+      }
+
+      position_alert();
+
+      window.addEventListener('resize', position_alert);
+
     </script>
 {% endblock %}

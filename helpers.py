@@ -4,6 +4,7 @@ from flask_session import Session
 import string
 import random
 from datetime import datetime as dt
+import numpy
 
 # Use decorator function to ensure that login is required
 #https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
@@ -24,3 +25,18 @@ def key_generator(size=7, chars=string.ascii_lowercase + string.ascii_uppercase 
 def datetime(value):
     """Format timestap into readable valus"""
     return dt.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
+
+def exchange(coin_dollar):
+    value = coin_dollar + numpy.random.normal(0, 2)
+    if value < 0:
+        value = 0
+    return value
+
+CURRENT_RATE = exchange(1000)
+
+def dollar(coins):
+    return f"${(coins/CURRENT_RATE):,.2f}"
+
+def coins(dollar):
+    return f"${(dollar*CURRENT_RATE):,.2f}"
+

@@ -18,8 +18,8 @@
       <tbody>
           {% for row in table %}
               <tr>
-                  <td>{{row.name}}</td>
-                  <td>{{row.receiver_id}}</td>
+                  <td>{{row.sender_name}}</td>
+                  <td>{{row.receiver_name}}</td>
                   <td>{{row.amount}}</td>
                   <td>{{row.timestamp | datetime}}</td>
                </tr>
