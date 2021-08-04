@@ -25,14 +25,11 @@ function timer(e){
   if (e.type == "focus")
   {
     start = e.timeStamp;
-    console.log("test", e.timeStamp);
   }
   else
   {
     end = e.timeStamp;
-    console.log("test_end", e.timeStamp);
     time = Math.round(end - start)/1000;
-    console.log("time", time);
     work_submit.value = time;
   }
 }
