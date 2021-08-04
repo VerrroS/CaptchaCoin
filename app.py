@@ -66,6 +66,8 @@ class Transactions(db.Model):
         self.amount = amount
         self.receiver_id = receiver_id
         self.timestamp = timestamp
+        self.sender_name = None
+        self.receiver_name = None
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -203,6 +205,9 @@ def transfer():
 def blockchain():
     # store data in table
     table = Transactions.query.all()
+    for row in table:
+        row.sender_name = User.query.filter_by(_id = row.sender_id).first().name
+        row.receiver_name = User.query.filter_by(_id = row.receiver_id).first().name
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
