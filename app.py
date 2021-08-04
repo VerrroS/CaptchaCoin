@@ -128,7 +128,7 @@ def logout():
 # https://pypi.org/project/captcha/
 #image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
-image = ImageCaptcha(width=250, height=100)
+image = ImageCaptcha(width=350, height=200)
 # Initiate key
 key = None
 
@@ -146,7 +146,7 @@ def work():
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
     # acess global variable key and st it to random key
     global key
-    key = key_generator()
+    key = key_generator(5)
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
