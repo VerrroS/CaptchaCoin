@@ -141,16 +141,25 @@ def work():
     work = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).first()
     time = 0
     avg_time = 0
+    sucess_rate = 0
     if work is not None:
         time = work.time
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
+        work_all =  Work.query.all()
+        success_count = 0
+        for row in work_all:
+            if row.success == True:
+                success_count += 1
+        sucess_rate = round(((success_count/ len(work_all))*100), 2)
+
     # acess global variable key and st it to random key
     global key
     key = key_generator(5)
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2))
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
+
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
