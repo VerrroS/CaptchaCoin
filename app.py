@@ -224,6 +224,10 @@ def blockchain():
 def shop():
     return render_template("shop.html")
 
+@app.route("/about", methods=["GET", "POST"])
+def about():
+    return render_template("about.html")
+
 
 # Custom filter
 app.jinja_env.filters["datetime"] = datetime
