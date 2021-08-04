@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator, datetime
+from helpers import login_required, key_generator, datetime, dollar, coins
 from captcha.image import ImageCaptcha
 import base64
 from datetime import datetime as dt
@@ -213,3 +213,5 @@ def shop():
 
 # Custom filter
 app.jinja_env.filters["datetime"] = datetime
+app.jinja_env.filters["dollar"] = dollar
+app.jinja_env.filters["coins"] = coins
