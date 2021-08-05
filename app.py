@@ -128,7 +128,7 @@ def logout():
 # https://pypi.org/project/captcha/
 #image = ImageCaptcha(fonts=['/path/A.ttf', '/path/B.ttf'])
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
-image = ImageCaptcha(width=350, height=200)
+image = ImageCaptcha(width=350, height=200, fonts=['/static/arial.ttf'])
 # Initiate key
 # Assing a value here already to prevent usein the function upper() on nontype value in case the site dosen't (re) load properly
 key = key_generator(5)
