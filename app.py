@@ -130,7 +130,8 @@ def logout():
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
 image = ImageCaptcha(width=350, height=200)
 # Initiate key
-key = None
+# Assing a value here already to prevent usein the function upper() on nontype value in case the site dosen't (re) load properly
+key = key_generator(5)
 
 @app.route("/work", methods=["GET", "POST"])
 @login_required
