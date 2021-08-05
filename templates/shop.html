@@ -7,8 +7,8 @@
 {% block main %}
     <h1>Shop</h1>
     {% if rest != none %}
-    <p>Seems like you need to earn {{rest}} more Coins to buy this item <br>
-      <a href="/about" class="text-secondary">Why is this so expensive?</a>
+    <p class="bg-dark text-light p-2">You need to earn {{rest}} more Coins to buy this item <br>
+      <a href="/about" class="text-light">Why is this so expensive?</a>
     </p>
     {% endif %}
 
@@ -34,8 +34,7 @@
           </div>
 
           <p>
-            Price {{item['price'] | coins}} Coins <br>
-            {{item['price']}}$
+            Price {{item['price'] | coins}} Coins ({{item['price']}}$)<br>
             Format: gif <br>
             Duration: 5 seconds <br>
             Title: Mug - not a robot <br>
