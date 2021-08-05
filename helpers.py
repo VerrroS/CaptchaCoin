@@ -35,10 +35,11 @@ def exchange(coin_dollar):
 CURRENT_RATE = exchange(1000)
 
 def dollar(coins):
-    return f"${(coins/CURRENT_RATE):,.2f}"
+    return f"{(coins/CURRENT_RATE):,.2f}"
 
 def coins(dollar):
-    return f"${(dollar*CURRENT_RATE):,.2f}"
+    return f"{(dollar*CURRENT_RATE):,.2f}"
+
 
 
 # While I dont have engough items for the shop use this to populate shop site
