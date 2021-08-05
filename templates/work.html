@@ -5,60 +5,103 @@
 {% endblock %}
 
 {% block main %}
-    <div class="btn">
-        <button type="button" id="stats" class="btn btn-secondary">Show Stats</button>
+
+    <div class="stats_container">
+      <span class="vertical">
+      Show Stats
+      </span>
+    <span class="text-left">
+      <p>
+            Average solving time
+            <br>
+            {{avg_time}} Seconds
+          </p>
+          <p>
+            Average sucess rate
+            <br>
+            {{sucess_rate}}%
+          </p></span>
+
     </div>
 
-    <div class="inactive stats_container">
-      <p>
-        Average solving time
-        <br>
-        {{avg_time}} Seconds
-      </p>
-      <p>
-        Average sucess rate
-        <br>
-        {{sucess_rate}}%
-      </p>
-    </div>
-
-    {% for category, message in get_flashed_messages(with_categories=True) %}
+    {% for category, message in get_flashed_messages(with_categories=true) %}
     <div class="alert {{category}}">{{ message }}</div>
     {% endfor %}
 
-    <div class="main">
+
     <h2 class="p-3">Earn Captcha Coin here</h2>
     <h3>Current cash {{cash}} Coins</h3>
     <h4>{{cash | dollar}}</h4>
     <p>time of last solved captcha {{time}} seconds</p>
-    <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="">
-    <form action="validate" method="post">
-      <input type="text" name="key" id="work_input" autocomplete="off">
-      <input type="submit" id="work_submit" name="time" class="btn btn-secondary btn-sm">
+    <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="captcha" class="mb-2">
+    <form method="post" action="/validate">
+      <input type="text" name="key" id="work_input" data-added="0" autocomplete="off" autofocus>
+      <button type="submit" name="time" id="work_submit" class="btn btn-secondary btn-sm">
+        Send
+      </button>
     </form>
-    </div>
-    <script type="text/javascript">
 
+    <script type="text/javascript">
+      const work_input = document.querySelector("#work_input");
+      const work_submit = document.querySelector("#work_submit")
       const captcha = document.querySelector("#captcha");
       const alert = document.querySelector(".alert");
+      const stats_container = document.querySelector(".stats_container");
+      stats_width = stats_container.querySelector(".text-left").getBoundingClientRect().width;
 
-      function position_alert()
-      {
-         captcha_coords = captcha.getBoundingClientRect()
-         alert_coords = alert.getBoundingClientRect()
+      function position() {
+        captcha_coords = captcha.getBoundingClientRect()
+        stats_container.style.setProperty('left', `-${stats_width + 5}px`);
+        if (alert != null)
+        {
+          alert_coords = alert.getBoundingClientRect();
+          const coords = {
+            top: captcha_coords.top - (alert_coords.width/2),
+            left: captcha_coords.left - (alert_coords.width/2)
+          }
 
-         const coords = {
-         	top: captcha_coords.top - (alert_coords.width/2),
-         	left: captcha_coords.left - (alert_coords.width/2)
-         }
-
-         alert.style.setProperty('top', `${coords.top}px`);
-         alert.style.setProperty('left', `${coords.left}px`);
+          alert.style.setProperty('top', `${coords.top}px`);
+          alert.style.setProperty('left', `${coords.left}px`);
+        }
       }
 
-      position_alert();
+      function open_stats() {
+        if (stats_container.classList.contains("active")) {
+           stats_container.classList.remove("active"); }
+        else {
+           stats_container.classList.add("active");
+       }
+     }
 
-      window.addEventListener('resize', position_alert);
+     let time
+     let start
+     function timer(e){
+       if (e.type == 'keydown'){
+         if (work_input.dataset.added == "0")
+         {
+           start = e.timeStamp;
+           work_input.dataset.added = "1"
+         }
+       }
+       else
+       {
+         end = e.timeStamp;
+         time = Math.round(end - start)/1000;
+         work_submit.value = time;
+       }
+     }
+
+     function timer_stop(){
+       work_input.dataset.added = "0"
+     }
+
+
+      stats_container.addEventListener('click', open_stats);
+      window.addEventListener('resize', position);
+      window.addEventListener('DOMContentLoaded', position);
+      work_input.addEventListener('keydown', timer);
+      work_input.addEventListener('focusout', timer_stop);
+      work_submit.addEventListener('click', timer);
 
     </script>
 {% endblock %}
