@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator, datetime, dollar, coins
+from helpers import login_required, key_generator, datetime, dollar, coins, inventory, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
 from datetime import datetime as dt
@@ -130,7 +130,8 @@ def logout():
 # options https://www.code-learner.com/generate-graphic-verification-code-using-python-captcha-module/
 image = ImageCaptcha(width=350, height=200)
 # Initiate key
-key = None
+# Assing a value here already to prevent usein the function upper() on nontype value in case the site dosen't (re) load properly
+key = key_generator(5)
 
 @app.route("/work", methods=["GET", "POST"])
 @login_required
@@ -220,9 +221,14 @@ def blockchain():
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
-@login_required
 def shop():
-    return render_template("shop.html")
+    user = User.query.filter_by(_id = session["user_id"]).first()
+    if request.method == "POST":
+        price = int(request.form.get('price'))*CURRENT_RATE
+        if user.cash < float(price):
+            rest = float(price) - float(user.cash)
+            return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
+    return render_template("shop.html", inventory = inventory, rest = None)
 
 @app.route("/about", methods=["GET", "POST"])
 def about():

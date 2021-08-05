@@ -6,62 +6,65 @@
 
 {% block main %}
     <h1>Shop</h1>
-
-    <a href="/about" class="text-secondary">Why is this so expensive?</a>
+    {% if rest != none %}
+    <p class="bg-dark text-light p-2">You need to earn {{rest}} more Coins to buy this item <br>
+      <a href="/about" class="text-light">Why is this so expensive?</a>
+    </p>
+    {% endif %}
 
     <div class="items pt-2">
+    {% for item in inventory %}
+    <div class="item">
+        <img src="{{item['img']}}" class="border-radius">
+        <p>{{item['name']}}<br> Price {{item['price']}}$ <br> {{item['price'] | coins}} Coins</p>
+        <div class="detail">
 
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
+           <header>
+             <h2>{{item['name']}}</h2>
+             <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 44px;"></span>
+           </header>
 
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
+          <div>
+              <img src="{{item['img']}}">
+              <form method="post" action="/shop">
+                <br>
+                <button class="btn btn-dark" value="{{item['price']}}" name="price" type="submit">
+                  Add to cart</button>
+              </form>
+          </div>
+
+          <p>
+            Price {{item['price'] | coins}} Coins ({{item['price']}}$)<br>
+            Format: gif <br>
+            Duration: 5 seconds <br>
+            Title: Mug - not a robot <br>
+            Edition: {{item['edition']}}/6 <br>
+            After purchase you will get a link to download the file
+          </p>
         </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
-        <div class="item">
-            <img src="static/mug.jpg">
-            <p>Mug - not a robot<br> Price 10$ <br> {{10 | coins}} Coins</p>
-        </div>
+      </div>
+        {% endfor %}
 
     </div>
 
+
+    <script type="text/javascript">
+
+    const items = document.querySelectorAll(".item");
+
+
+    function show_details(e){
+      detail = this.querySelector(".detail");
+      detail.classList.toggle("open");
+      document.querySelector("body").classList.toggle("open");
+      localStorage.setItem('detail', this.dataset.id);
+    }
+
+    items.forEach((item) => {
+      item.addEventListener('click', show_details);
+    });
+
+
+  </script>
 
 {% endblock %}
