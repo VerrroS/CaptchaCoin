@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator, datetime, dollar, coins
+from helpers import login_required, key_generator, datetime, dollar, coins, inventory, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
 from datetime import datetime as dt
@@ -220,9 +220,14 @@ def blockchain():
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
-@login_required
 def shop():
-    return render_template("shop.html")
+    user = User.query.filter_by(_id = session["user_id"]).first()
+    if request.method == "POST":
+        price = int(request.form.get('price'))*CURRENT_RATE
+        if user.cash < float(price):
+            rest = float(price) - float(user.cash)
+            return render_template("shop.html", inventory = inventory, rest = rest)
+    return render_template("shop.html", inventory = inventory, rest = None)
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
