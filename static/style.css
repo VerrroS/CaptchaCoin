@@ -51,31 +51,27 @@ img {
   margin-top: -5px;
 }
 
-input[type=number]{
-  width: 6vw;
-}
-
 .items {
   display: grid;
   display: grid;
   gap: 30px;
   grid-template-columns: 20vw 20vw;
   margin: auto;
+  justify-content: center;
 }
 
 .stats_container {
   padding: 5px;
-  margin-top: 50px;
   position: absolute;
-  left: 0;
   background-color: #6c757d;
-  min-width: 20vw;
   color: white;
   transition: left .5s;
+  display: flex;
+  flex-direction: row-reverse;
 }
 
-.inactive {
-  left: -1000px;
+.active {
+  left: 0px!important;
 }
 
 .hello{
@@ -88,37 +84,35 @@ input[type=number]{
   position: absolute;
 }
 
-.btn {
-  align-self: flex-start;
-}
-
-.main{
-  width: 100%;
-  text-align: center;
-  display: flex;
-  gap: 15px;
-  flex-direction: column;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 4;
-  gap: 10px;
+.container_main {
   max-width: 100vw;
   padding: 0;
   text-align: center;
 }
 
+form {
+  display: flex;
+flex-direction: column;
+gap: 7px;
+width: fit-content;
+margin: auto;
+}
+
+form .btn {
+  align-self:center;
+}
 
 .alert {
-  text-align: center;
+    font-size: small;
+    padding: 10px;
+    line-height: 1;
+    text-align: center;
     color: black;
     font-weight: bold;
     position: absolute;
     z-index: 1;
-    width: 75px;
-    height: 75px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     -webkit-animation: jello-vertical 0.9s both;
     animation:jello-vertical 0.9s both ;
@@ -133,7 +127,10 @@ input[type=number]{
 }
 
 #captcha{
-
     box-shadow: 0px 0px 4px 1px #0000003d;
+}
 
+.vertical {
+  writing-mode: vertical-lr;
+  padding: 10px 5px 10px 15px;
 }
