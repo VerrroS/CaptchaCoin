@@ -40,3 +40,15 @@ def dollar(coins):
 def coins(dollar):
     return f"${(dollar*CURRENT_RATE):,.2f}"
 
+
+# While I dont have engough items for the shop use this to populate shop site
+inventory = []
+for i in range(6):
+    inventory.append({"id": i, "img": "static/mug.jpg", "price": 10, "edition": i+1, "name": "mug - not a robot"})
+
+
+#inventory = [
+#{'img': 'static/mug.jpg',
+#'price': 10,
+#'name': 'mug - not a robot'}
+#]
