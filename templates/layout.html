@@ -20,7 +20,7 @@
 
     </head>
 
-    <body>
+    <body class={% block body_class %}{% endblock %}>
 
         <nav class="navbar navbar-expand-md navbar-light bg-light border">
             <a class="navbar-brand" href="/">CaptchaCoin</a>
@@ -50,11 +50,11 @@
                 {% endif %}
             </div>
         </nav>
-        <main class="container">
+        <main class="container_main">
             {% block main %}{% endblock %}
         </main>
 
-        <footer class="small text-center text-muted p-2">
+        <footer class="small text-center text-muted p-4">
             <a href="/about">About</a> <br>
             All rights reserved by CaptchaCoin.
         </footer>
