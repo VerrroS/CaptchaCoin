@@ -5,15 +5,17 @@
 {% endblock %}
 
 {% block main %}
-    <h2>Transfer money</h2>
-    <h3>Your current status <br>
-    {{cash}} Coins</h3>
-    <h4>{{cash | dollar}}</h4>
-    <form action="transfer" method="post">
-      <label for="">Send to</label>
-      <input type="text" name="receiver" placeholder="put in public key here">
-      <input type="number" name="amount" placeholder="amount" min="1">
-      <input type="submit" value="Submit" class="btn btn-secondary btn-sm">
+<span>
+  <h2>Transfer money</h2>
+  <h3>Your current status <br>
+  {{cash}} Coins</h3>
+  <h4>{{cash | dollar}}</h4>
+  <form action="transfer" method="post">
+    <label for="">Send to</label>
+    <input type="text" name="receiver" placeholder="put in public key here">
+    <input type="number" name="amount" placeholder="amount" min="1">
+    <input type="submit" value="Submit" class="btn btn-secondary btn-sm">
+</span>
     </form>
     {% if enough == false %}
     <p> You dont have enough coins for this transaction</p>
