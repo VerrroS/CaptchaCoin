@@ -227,7 +227,7 @@ def shop():
         price = int(request.form.get('price'))*CURRENT_RATE
         if user.cash < float(price):
             rest = float(price) - float(user.cash)
-            return render_template("shop.html", inventory = inventory, rest = rest)
+            return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
     return render_template("shop.html", inventory = inventory, rest = None)
 
 @app.route("/about", methods=["GET", "POST"])
