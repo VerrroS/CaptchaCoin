@@ -192,7 +192,7 @@ def transfer():
         amount = int(request.form.get("amount"))
         # if sender has not enough money
         if float(amount) > float(user.cash):
-            return render_template("transfer.html", enough = False, cash = sender_cash[0])
+            return render_template("transfer.html", enough = False, cash = user.cash)
         # if receiver does not exist
         receiver_info = User.query.filter_by(public_key = receiver).first()
         if receiver_info is None:
