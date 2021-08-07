@@ -1,3 +1,7 @@
+html{
+  font-size: 18px;
+}
+
 body{
   display: flex;
   flex-direction: column;
@@ -98,7 +102,7 @@ img {
     border-radius: 10px 10px 0 0;
 }
 
-.items img {
+.items img, .items video {
   width: 100%;
 }
 
