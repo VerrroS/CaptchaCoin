@@ -32,7 +32,7 @@ def exchange(coin_dollar):
         value = 0
     return value
 
-CURRENT_RATE = exchange(1000)
+CURRENT_RATE = exchange(1300)
 
 def dollar(coins):
     return f"${(coins/CURRENT_RATE):,.2f}"
