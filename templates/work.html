@@ -6,6 +6,13 @@
 
 {% block main %}
 
+    <audio class="win">
+    <source src="/static/win.wav" type="audio/wav">
+    </audio>
+    <audio class="loose">
+    <source src="/static/loose.wav" type="audio/wav">
+    </audio>
+
     <div class="stats_container">
       <span class="vertical">
       Show Stats
@@ -32,7 +39,9 @@
     <h2 class="p-3">Earn Captcha Coin here</h2>
     <h3>Current cash {{cash}} Coins</h3>
     <h4>{{cash | dollar}}</h4>
-    <p>time of last solved captcha {{time}} seconds</p>
+    <p>time of last solved captcha {{time}} seconds
+      <img class="sound" alt="" width="20px">
+    </p>
     <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="captcha" class="mb-2">
     <form method="post" action="/validate">
       <input type="text" name="key" id="work_input" data-added="0" autocomplete="off" autofocus>
@@ -48,6 +57,7 @@
       const alert = document.querySelector(".alert");
       const stats_container = document.querySelector(".stats_container");
       stats_width = stats_container.querySelector(".text-left").getBoundingClientRect().width;
+      const sound = document.querySelector(".sound");
 
       function position() {
         captcha_coords = captcha.getBoundingClientRect()
@@ -62,7 +72,17 @@
 
           alert.style.setProperty('top', `${coords.top}px`);
           alert.style.setProperty('left', `${coords.left}px`);
+          if(localStorage["sound"] != null){
+             if (alert.classList.contains("point")){
+               document.querySelector(".win").play();
+             }
+             else{
+               document.querySelector(".loose").play();
+             }
+          }
         }
+
+
       }
 
       function open_stats() {
@@ -95,7 +115,29 @@
        work_input.dataset.added = "0"
      }
 
+     function sound_toggle(){
+       if (localStorage["sound"] == null){
+         localStorage["sound"] = "on";
+         sound.src = "/static/on.svg"
+       }
+       else {
+         localStorage.removeItem('sound')
+          sound.src = "/static/off.svg"
+       }
+     }
 
+     function sound_check(){
+       if (localStorage["sound"] != null){
+         sound.src = "/static/on.svg"
+       }
+       else {
+         localStorage.removeItem('sound')
+          sound.src = "/static/off.svg"
+       }
+     }
+
+      sound_check();
+      sound.addEventListener('click', sound_toggle);
       stats_container.addEventListener('click', open_stats);
       window.addEventListener('resize', position);
       window.addEventListener('DOMContentLoaded', position);
