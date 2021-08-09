@@ -45,7 +45,7 @@
     <img id="captcha" src="data:image/jpeg;base64,{{ captcha }}" alt="captcha" class="mb-2">
     <form method="post" action="/validate">
       <input type="text" name="key" id="work_input" data-added="0" autocomplete="off" autofocus>
-      <button type="submit" name="time" id="work_submit" class="btn btn-secondary btn-sm">
+      <button type="submit" name="time" id="work_submit" class="btn btn-secondary btn-sm" onsubmit="this.disabled = true">
         Send
       </button>
     </form>
