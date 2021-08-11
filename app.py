@@ -209,7 +209,7 @@ def transfer():
         db.session.add(new_data)
         db.session.commit()
         return render_template("transfer.html", success = True, cash = user.cash - amount)
-    return render_template("transfer.html", cash = user.cash)
+    return render_template("transfer.html", cash = user.cash, persons = all_user)
 
 @app.route("/blockchain", methods=["GET", "POST"])
 @login_required
