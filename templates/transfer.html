@@ -5,6 +5,19 @@
 {% endblock %}
 
 {% block main %}
+
+<div class="info_container">
+<p class="vertical">Looking for someone?</p>
+<form>
+    <input type="text" class="search" autofocus>
+    <ul class="suggestions">
+      {% for person in persons %}
+            <li class="d-none person" data-name="{{person.name}}">{{person.name}} - public key: <span class="bg-dark text-light">{{person.public_key}}</span></li>
+      {% endfor %}
+    </ul>
+</form>
+</div>
+
 <span>
   <h2>Transfer money</h2>
   <h3>Your current status <br>
@@ -15,6 +28,7 @@
     <input type="text" name="receiver" placeholder="put in public key here">
     <input type="number" name="amount" placeholder="amount" min="1">
     <input type="submit" value="Submit" class="btn btn-secondary btn-sm">
+  </form>
 </span>
     </form>
     {% if enough == false %}
@@ -26,4 +40,48 @@
     {% if success == true %}
     <p> Transaction was successful</p>
     {% endif %}
+
+
+
+    <script type="text/javascript">
+    const search = document.querySelector(".search");
+    const suggestions = document.querySelector(".suggestions");
+    const results = document.querySelectorAll(".person");
+    const info_container = document.querySelector(".info_container");
+    const info_btn = info_container.querySelector(".vertical");
+
+
+    function display_matches(){
+      regex = new RegExp(`${search.value}`, "gi")
+      results.forEach((item, i) => {
+         if(regex.test(item.dataset.name) && search.value.length != 0)
+         {
+           item.classList.remove("d-none")}
+
+       else if (!item.classList.contains("d-none")){
+         item.classList.add("d-none")
+       }});
+    }
+
+     function position(){
+       stats_width = info_container.querySelector("form").getBoundingClientRect().width;
+       info_container.style.setProperty('left', `-${stats_width + 5}px`);
+     }
+
+     function open_stats() {
+       if (info_container.classList.contains("active")) {
+          info_container.classList.remove("active"); }
+       else {
+          info_container.classList.add("active");
+      }
+      position();
+    }
+
+      position();
+      info_btn.addEventListener('click', open_stats);
+      search.addEventListener("change", display_matches);
+      search.addEventListener("keyup", display_matches);
+      window.addEventListener('resize', position);
+    </script>
+
 {% endblock %}

@@ -126,7 +126,7 @@ img {
   justify-content: center;
 }
 
-.stats_container {
+.info_container, .stats_container {
   padding: 5px;
   position: absolute;
   background-color: #6c757d;
@@ -134,6 +134,10 @@ img {
   transition: left .5s;
   display: flex;
   flex-direction: row-reverse;
+}
+
+.info_container form {
+  margin: inherit;
 }
 
 .active {
