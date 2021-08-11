@@ -5,6 +5,19 @@
 {% endblock %}
 
 {% block main %}
+
+<div class="info_container">
+<p class="vertical">Looking for someone?</p>
+<form>
+    <input type="text" class="search" autofocus>
+    <ul class="suggestions">
+      {% for person in persons %}
+            <li class="d-none person" data-name="{{person.name}}">{{person.name}} - public key: <span class="bg-dark text-light">{{person.public_key}}</span></li>
+      {% endfor %}
+    </ul>
+</form>
+</div>
+
 <span>
   <h2>Transfer money</h2>
   <h3>Your current status <br>
