@@ -7,17 +7,20 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator, datetime, dollar, coins, inventory, CURRENT_RATE
+from helpers import login_required, key_generator, datetime, dollar, coins, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
 from datetime import datetime as dt
 
 # Configure application
 app = Flask(__name__)
+db = SQLAlchemy(app)
 
+from tables import User, Work, Transactions, Items
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
