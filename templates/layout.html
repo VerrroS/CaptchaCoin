@@ -37,7 +37,8 @@
                         <li class="nav-item"><a class="nav-link" href="/blockchain">Blockchain</a></li>
                     </ul>
                     <ul class="navbar-nav ml-auto mt-2">
-                        <li class="nav-item">
+                        {% block cart %}{% endblock%}
+                        <li class="nav-item ml-2">
                           <form action="/logout" method="get">
                           <input  type="submit" value="logout" class="btn btn-secondary btn-sm">
                           </form>
