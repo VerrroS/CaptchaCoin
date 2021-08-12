@@ -17,57 +17,7 @@ app = Flask(__name__)
 
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
-
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    __tablename__ = 'user'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    mail = db.Column(db.String(100), nullable=False)
-    key = db.Column(db.String(100), nullable=False)
-    public_key = db.Column(db.String(100), nullable=False)
-    cash = db.Column(db.Integer, default=0)
-
-    def __init__(self, name, mail, key, public_key, cash):
-        self.name = name
-        self.mail = mail
-        self.key = key
-        self.cash = cash
-        self.public_key = public_key
-
-class Work(db.Model):
-    __tablename__ = 'work'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer)
-    time = db.Column(db.Float)
-    success = db.Column(db.Boolean)
-    timestamp = db.Column(db.Numeric)
-
-    def __init__(self, user_id, time, success, timestamp):
-        self.user_id = user_id
-        self.time = time
-        self.success = success
-        self.timestamp = timestamp
-
-
-class Transactions(db.Model):
-    __tablename__ = 'transactions'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sender_id = db.Column(db.Integer, nullable=False)
-    amount = db.Column(db.Integer, nullable=False)
-    receiver_id = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.Numeric, nullable=False)
-
-    def __init__(self, sender_id, amount, receiver_id, timestamp):
-        self.sender_id = sender_id
-        self.amount = amount
-        self.receiver_id = receiver_id
-        self.timestamp = timestamp
-        self.sender_name = None
-        self.receiver_name = None
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
