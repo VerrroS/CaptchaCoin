@@ -5,6 +5,19 @@
 {% endblock %}
 
 {% block main %}
+
+{% if card != none %}
+   <div class="cart_container">
+     <p>Your Shopping Cart</p>
+     <ul>
+
+     </ul>
+     <form class="" action="index.html" method="post">
+       <input type="submit" name="" value="">
+     </form>
+   </div>
+{% endif %}
+
     <h1>Shop</h1>
     {% if rest != none %}
     <p class="bg-dark text-light p-2">You need to earn {{rest}} more Coins to buy this item <br>
@@ -14,37 +27,35 @@
 
     <div class="items pt-2">
     {% for item in inventory %}
-    <div class="item">
-        <img src="{{item['img']}}" class="border-radius">
-        <p>{{item['name']}}<br> Price {{item['price']}}$ <br> {{item['price'] | coins}} Coins</p>
+    <div class="item" data-id="{{item._id}}">
+        <img src="{{item.img}}" class="border-radius">
+        <p>{{item.name}}<br> Price {{item.price}}$ <br> {{item.price | coins}} Coins</p>
         <div class="detail">
 
            <header>
-             <h2>{{item['name']}}</h2>
+             <h2>{{item.name}}</h2>
              <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 44px;"></span>
            </header>
 
           <div>
-            {% if item['content'] != 0 %}
+            {% if item.content != "" %}
               <video  autoplay  loop>
-                 <source src="{{item['content']}}" type="video/mp4" poster="{{item['img']}}">
+                 <source src="{{item.content}}" type="video/mp4" poster="{{item.img}}">
               </video>
             {% else %}
-            <img src="{{item['img']}}">
+            <img src="{{item.img}}">
             {% endif %}
-              <form method="post" action="/shop">
                 <br>
-                <button class="btn btn-dark" value="{{item['price']}}" name="price" type="submit">
+                <button class="btn btn-dark add_card" name="price" value="{{item._id}}">
                   Add to cart</button>
-              </form>
           </div>
 
           <p>
-            Price {{item['price'] | coins}} Coins ({{item['price']}}$)<br>
-            Format: {{item['type']}} <br>
-            Duration: {{item['duration']}} <br>
-            Title: {{item['name']}} <br>
-            Edition: {{item['edition']}}/6 <br>
+            Price {{item.price | coins}} Coins ({{item.price}}$)<br>
+            Format: {{item.type}} <br>
+            Duration: {{item.duration}} <br>
+            Title: {{item.name}} <br>
+            Edition: {{item.edition}}/6 <br>
             After purchase you will get a link to download the file
           </p>
         </div>
@@ -57,7 +68,30 @@
     <script type="text/javascript">
 
     const items = document.querySelectorAll(".item");
+    const btns = document.querySelectorAll(".add_card");
+    var list = [];
 
+    function open_cart(){
+
+    }
+
+    function addto_cart(e){
+        list.push(this.value);
+        localStorage['cart'] = list;
+        cart_check();
+    }
+
+    function cart_check(){
+      if (localStorage['cart'] != undefined)
+      {
+          //list = localStorage['cart']
+      }
+      if (list.length > 0)
+      {
+        const cart_icon = document.querySelector('#cart');
+        cart_icon.innerHTML = '<span class="iconify " data-icon="clarity:shopping-cart-outline-badged" style="font-size: 33px;""></span>';
+      }
+    }
 
     function show_details(e){
       detail = this.querySelector(".detail");
@@ -70,6 +104,11 @@
       item.addEventListener('click', show_details);
     });
 
+    cart_check();
+
+    btns.forEach((item, i) => {item.addEventListener
+      ("click", addto_cart)
+    });
 
   </script>
 
