@@ -53,7 +53,6 @@ def login():
 def register():
     if request.method == "POST":
         name = request.form.get("name")
-        mail = request.form.get("mail")
         cash = 0
         key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
         public_key = key_generator(10)
@@ -61,7 +60,7 @@ def register():
         # TO-DO check if this works
         if public_key in User.query.filter_by(public_key = public_key).all() or  key in User.query.filter_by(key = key).all():
             return redirect("/register")
-        new_data = User(name, mail, key, public_key, cash)
+        new_data = User(name, key, public_key, cash)
         db.session.add(new_data)
         db.session.commit()
         return render_template("register.html", key = key, registered = True, public_key = public_key)
