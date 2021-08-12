@@ -4,6 +4,13 @@
     Shop
 {% endblock %}
 
+{% block cart %}
+<button onclick="open_card()" id="cart">
+  <span class="iconify" data-icon="clarity:shopping-cart-line" style="font-size: 33px;"></span>
+
+</button>
+{% endblock%}
+
 {% block main %}
 
 {% if card != none %}
