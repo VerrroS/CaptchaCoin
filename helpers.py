@@ -41,16 +41,3 @@ def coins(dollar):
     return f"{(dollar*CURRENT_RATE):,.2f}"
 
 
-
-# While I dont have engough items for the shop use this to populate shop site
-inventory = []
-for i in range(6):
-    inventory.append({"img": "static/mug.jpg", "price": 10, "edition": i+1, "name": "mug - not a robot", "type": "gif", "duration": "5s", "content": "/static/mug_loop.mp4"})
-
-for i in range(6):
-    inventory.append({"img": "static/shirt.jpg", "price": 20, "edition": i+1, "name": "shirt - no robot allowed", "type": "jpg", "duration": "still", "content": 0})
-#inventory = [
-#{'img': 'static/mug.jpg',
-#'price': 10,
-#'name': 'mug - not a robot'}
-#]
