@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Start
+{% endblock %}
+
+{% block main %}
+
+<h1>Your Items here</h1>
+
+{% if items == none %}
+<h3>You have no items yet. <br> Visit our <a href="/shop">Shop</a> t</h3>
+{% endif %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th>value</th>
+      <th>type</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for item in items %}
+          <tr>
+              <td><img src="{{item.img}}" alt="" width="200px"></td>
+              <td>{{item.name}}</td>
+              <td>{{item.price | coins}} Coins</td>
+              <td>{{item.type}}</td>
+              <td><a href="{{item.link}}" download target="_blank">Download</a></td>
+           </tr>
+      {% endfor %}
+  </tbody>
+
+</table>
+
+{% endblock %}
