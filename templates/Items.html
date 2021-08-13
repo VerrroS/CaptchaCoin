@@ -33,6 +33,11 @@
               <td>{{item.price | coins}} Coins</td>
               <td>{{item.type}}</td>
               <td><a href="{{item.link}}" download target="_blank">Download</a></td>
+              <td><form action="/items" method="post">
+                <input type="text" name="key" placeholder="put in public key here">
+                <input type="text" name="item" value="{{item._id}}" class="d-none">
+                <input type="submit" name="" value="Send">
+              </form></td>
            </tr>
       {% endfor %}
   </tbody>
