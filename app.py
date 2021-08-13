@@ -182,18 +182,23 @@ def shop():
         items_str = request.form.get("cart_items")
         items = items_str.split(",");
         total = 0
+        # Calculate price
         for item in shop_items:
             if str(item._id) in items:
                 total += float(item.price)*CURRENT_RATE
         if user.cash < float(total) and total > 0:
             rest = float(total) - float(user.cash)
             return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
+        ts = dt.now().timestamp()
+        # Change owner and add to vlockchain shop -> user
         for item in shop_items:
             if str(item._id) in items:
                 item.owner_id = user._id
+                new_data = Transactions(1, item.name, session["user_id"], ts)
+                db.session.add(new_data)
         user.cash -= round(total, 2);
         user.cash = round(user.cash, 2)
-        ts = dt.now().timestamp()
+        # Add to Blockchain user -> Shop
         new_data = Transactions(session["user_id"], round(total, 2), 1, ts)
         db.session.add(new_data)
         db.session.commit()
