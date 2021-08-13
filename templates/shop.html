@@ -14,14 +14,20 @@
 
    <div class="cart_container d-none">
      <p>Your Shopping Cart</p>
-     <ul>
+     <table>
        {% for item in inventory %}
-          <li class="d-none" data-id="{{item._id}}">{{item.name}} {{item.price | coins}} Coins
-            <button type="button" name="button" data-id="{{item._id}}">
-              <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 12px;"></span>
-            </button></li>
+       <tr class="d-none" data-id="{{item._id}}">
+         <td>{{item.name}}</td>
+         <td>{{item.price | coins}} Coins</td>
+         <td><button type="button" name="button" data-id="{{item._id}}">
+           <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 22px;"></span>
+         </button></td>
+        </tr>
        {% endfor %}
-     </ul>
+       <tr class="d-none" id="empty">
+         <td>Your cart is empty</td>
+       </tr>
+     </table>
      <form action="/shop" method="post">
        <input class="d-none" name="cart_items">
        <input type="submit" name="" value="Buy" onclick="clear_list()">
