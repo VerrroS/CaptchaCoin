@@ -29,13 +29,15 @@ h1{
 
 .detail {
   position: fixed;
+  z-index: 2;
   background-color: pink;
   color: black;
   display: none;
-  top:0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  width: 70vw;
+  height: 70vw;
   grid-template-columns: repeat(8, 1fr);
   grid-auto-rows: minmax(100px, auto);
   grid-template-areas:
@@ -138,6 +140,15 @@ img {
 
 .info_container form {
   margin: inherit;
+}
+
+.cart_container {
+  background-color: lightgrey;
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  z-index: 1;
+  box-shadow: -3px 7px 20px 0px #0000002b;
 }
 
 .active {
