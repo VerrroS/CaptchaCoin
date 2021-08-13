@@ -12,6 +12,10 @@
 <h3>You have no items yet. <br> Visit our <a href="/shop">Shop</a> t</h3>
 {% endif %}
 
+{% for message in get_flashed_messages() %}
+<div class="bg-dark text-light p-2">{{ message }}</div>
+{% endfor %}
+
 <table class="table">
   <thead>
     <tr>
