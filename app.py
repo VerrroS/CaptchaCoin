@@ -181,7 +181,25 @@ def shop():
         price = float(request.form.get('price'))*CURRENT_RATE
         if user.cash < float(price):
             rest = float(price) - float(user.cash)
+        items_str = request.form.get("cart_items")
+        items = items_str.split(",");
+        total = 0
+        for item in shop_items:
+            if str(item._id) in items:
+                total += float(item.price)*CURRENT_RATE
+        if user.cash < float(total) and total > 0:
+            rest = float(total) - float(user.cash)
             return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
+        for item in shop_items:
+            if str(item._id) in items:
+                item.owner_id = user._id
+        user.cash -= round(total, 2);
+        user.cash = round(user.cash, 2)
+        ts = dt.now().timestamp()
+        new_data = Transactions(session["user_id"], round(total, 2), 1, ts)
+        db.session.add(new_data)
+        db.session.commit()
+        return redirect("/items")
     return render_template("shop.html", inventory = inventory, rest = None)
 
 @app.route("/about", methods=["GET", "POST"])
