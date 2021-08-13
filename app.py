@@ -202,6 +202,12 @@ def shop():
         return redirect("/items")
     return render_template("shop.html", inventory = inventory, rest = None)
 
+@app.route("/items", methods=["GET", "POST"])
+def items():
+    items = Items.query.filter_by(owner_id = session["user_id"]).all()
+    return render_template("items.html", items = items)
+
+
 @app.route("/about", methods=["GET", "POST"])
 def about():
     return render_template("about.html")
