@@ -176,11 +176,9 @@ def blockchain():
 @app.route("/shop", methods=["GET", "POST"])
 def shop():
     user = User.query.filter_by(_id = session["user_id"]).first()
+    shop_items = Items.query.all()
     inventory = Items.query.all()
     if request.method == "POST":
-        price = float(request.form.get('price'))*CURRENT_RATE
-        if user.cash < float(price):
-            rest = float(price) - float(user.cash)
         items_str = request.form.get("cart_items")
         items = items_str.split(",");
         total = 0
