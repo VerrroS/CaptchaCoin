@@ -203,6 +203,22 @@ def shop():
 @app.route("/items", methods=["GET", "POST"])
 def items():
     items = Items.query.filter_by(owner_id = session["user_id"]).all()
+    if request.method == "POST":
+        ts = dt.now().timestamp()
+        receiver = request.form.get("key")
+        receiver_info = User.query.filter_by(public_key = receiver).first()
+        if receiver_info is None:
+            flash("This receiver does not exist", "error")
+            return render_template("items.html", items = items)
+        receiver_id = receiver_info._id
+        item = request.form.get("item")
+        # Query specific item to set the new owner
+        this_item = Items.query.filter_by(_id = item).first()
+        this_item.owner_id = receiver
+        new_data = Transactions(session["user_id"], this_item.name, receiver_id, ts)
+        db.session.add(new_data)
+        db.session.commit()
+        flash("Transaction successful", "success")
     return render_template("items.html", items = items)
 
 
