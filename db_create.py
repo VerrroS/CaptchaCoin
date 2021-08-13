@@ -16,18 +16,20 @@ db.session.add(new_data)
 db.session.commit()
 
 def populate_shop():
+    id = 0
     name = "desktop background"
-    price = 0.05
+    price = 0.01
     img = "/static/background_q.png"
     type = "png"
     duration = 0
     content = ""
     owner_id = 0
     edition = 0
-    link = ""
-    new_data = Items(name, price, img, content,type, duration,edition, owner_id, link)
+    link = "https//veronikasimmering.de/background.png"
+    new_data = Items(id, name, price, img, content,type, duration,edition, owner_id, link)
     db.session.add(new_data)
     for i in range(6):
+        id = i+1
         name = "mug - not a robot"
         price = 10
         img = "/static/mug.jpg"
@@ -36,10 +38,11 @@ def populate_shop():
         duration = 5
         edition = i+1
         owner_id = 0
-        link = ""
-        new_data = Items(name, price, img, content, type, duration, edition, owner_id, link)
+        link = "https//veronikasimmering.de/background.png"
+        new_data = Items(id, name, price, img, content, type, duration, edition, owner_id, link)
         db.session.add(new_data)
     for i in range(6):
+        id = i+ 7
         name = "shirt - no robot allowed"
         price = 20
         img = "/static/shirt.jpg"
@@ -48,8 +51,8 @@ def populate_shop():
         content = ""
         edition = i+1
         owner_id = 0
-        link = ""
-        new_data = Items(name, price, img, content, type, duration, edition, owner_id, link)
+        link = "https//veronikasimmering.de/background.png"
+        new_data = Items(id, name, price, img, content, type, duration, edition, owner_id, link)
         db.session.add(new_data)
     db.session.commit()
 populate_shop()
