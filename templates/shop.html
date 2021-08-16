@@ -46,36 +46,50 @@
     {% for item in inventory %}
     <div class="item" data-id="{{item._id}}">
         <img src="{{item.img}}" class="border-radius">
-        <p>{{item.name}}<br> Price {{item.price}}$ <br> {{item.price | coins}} Coins</p>
+        <p>{{item.name}}
+        {% if item.edition != 0%}
+          {{item.edition}}
+          {% endif %}
+          <br> Price {{item.price}}$ <br> {{item.price | coins}} Coins</p>
         <div class="detail">
-           <header>
-             <h2>{{item.name}}</h2>
-             <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 44px;"></span>
-           </header>
+          <div class="box">
+            <header>
+              <h2>{{item.name}}</h2>
+              <span class="iconify" data-inline="false" data-icon="ci:close-big" style="font-size: 44px;"></span>
+            </header>
 
-          <div>
-            {% if item.content != "" %}
-              <video  autoplay  loop>
-                 <source src="{{item.content}}" type="video/mp4" poster="{{item.img}}">
-              </video>
-            {% else %}
-            <img src="{{item.img}}">
-            {% endif %}
-                <br>
-                <button class="btn btn-dark add_card" name="price" value="{{item._id}}">
-                  Add to cart</button>
+           <div>
+             {% if item.content != "" %}
+               <video  autoplay  loop>
+                  <source src="{{item.content}}" type="video/mp4" poster="{{item.img}}">
+               </video>
+             {% else %}
+             <img src="{{item.img}}">
+             {% endif %}
+             {% if item.owner_name == "Shop" %}
+                 <button class="btn btn-dark add_card mt-2" name="price" value="{{item._id}}">
+                   Add to cart</button>
+              {% else %}
+              <p>Item owned by {{item.owner_name}}</p>
+              {% endif %}
+           </div>
+
+           <p>
+             Price {{item.price | coins}} Coins ({{item.price}}$)<br>
+             Format: {{item.type}} <br>
+             Duration: {{item.duration}} <br>
+             Title: {{item.name}} <br>
+             Edition: {{item.edition}}<br>
+             After purchase you will get a link to download the file
+           </p>
           </div>
-
-          <p>
-            Price {{item.price | coins}} Coins ({{item.price}}$)<br>
-            Format: {{item.type}} <br>
-            Duration: {{item.duration}} <br>
-            Title: {{item.name}} <br>
-            Edition: {{item.edition}}/6 <br>
-            After purchase you will get a link to download the file
-          </p>
         </div>
+        {% if item.owner_name != "Shop" %}
+        <div class="ribbon">
+	      <span>sold</span>
       </div>
+        {% endif %}
+        </div>
         {% endfor %}
 
     </div>
@@ -150,6 +164,7 @@
         localStorage['cart'] = JSON.stringify(list);
         cart_check();
         open_cart(true);
+        window.scrollTo(0,0);
         cart_value.value = list;
     }
 
