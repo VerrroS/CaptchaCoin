@@ -192,7 +192,7 @@ def shop():
             rest = float(total) - float(user.cash)
             return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
         ts = dt.now().timestamp()
-        # Change owner and add to vlockchain shop -> user
+        # Change owner and add to blockchain shop -> user
         for item in shop_items:
             if str(item._id) in items:
                 item.owner_id = user._id
