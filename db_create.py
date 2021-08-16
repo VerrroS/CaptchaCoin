@@ -3,8 +3,8 @@ from tables import User, Work, Transactions, Items
 from flask_sqlalchemy import SQLAlchemy
 db.create_all()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 # initialize shop as 1st user
 name = "Shop"
