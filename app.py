@@ -178,6 +178,8 @@ def shop():
     user = User.query.filter_by(_id = session["user_id"]).first()
     shop_items = Items.query.all()
     inventory = Items.query.all()
+    for row in shop_items:
+        row.owner_name = User.query.filter_by(_id = row.owner_id).first().name
     if request.method == "POST":
         items_str = request.form.get("cart_items")
         items = items_str.split(",");
