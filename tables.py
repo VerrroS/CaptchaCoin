@@ -55,7 +55,7 @@ class Items(db.Model):
     content = db.Column(db.String(100))
     type = db.Column(db.String(100), nullable=False)
     duration = db.Column(db.Integer)
-    edition = db.Column(db.Integer)
+    edition = db.Column(db.String(100))
     owner_id = db.Column(db.Integer, default=0)
     link = db.Column(db.String(100))
 
@@ -69,4 +69,5 @@ class Items(db.Model):
         self.duration = duration
         self.edition = edition
         self.owner_id = owner_id
+        self.owner_name = None
         self.link = link
