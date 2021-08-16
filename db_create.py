@@ -1,6 +1,7 @@
 from app import db, app
 from tables import User, Work, Transactions, Items
 from flask_sqlalchemy import SQLAlchemy
+import os
 db.create_all()
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
