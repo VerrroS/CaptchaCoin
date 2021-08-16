@@ -7,67 +7,20 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import sys
 import os
 from datetime import datetime
-from helpers import login_required, key_generator, datetime, dollar, coins, inventory, CURRENT_RATE
+from helpers import login_required, key_generator, datetime, dollar, coins, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
 from datetime import datetime as dt
 
 # Configure application
 app = Flask(__name__)
-
-#configure DATABASE
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test7.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
-
 db = SQLAlchemy(app)
 
-class User(db.Model):
-    __tablename__ = 'user'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    mail = db.Column(db.String(100), nullable=False)
-    key = db.Column(db.String(100), nullable=False)
-    public_key = db.Column(db.String(100), nullable=False)
-    cash = db.Column(db.Integer, default=0)
-
-    def __init__(self, name, mail, key, public_key, cash):
-        self.name = name
-        self.mail = mail
-        self.key = key
-        self.cash = cash
-        self.public_key = public_key
-
-class Work(db.Model):
-    __tablename__ = 'work'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer)
-    time = db.Column(db.Float)
-    success = db.Column(db.Boolean)
-    timestamp = db.Column(db.Numeric)
-
-    def __init__(self, user_id, time, success, timestamp):
-        self.user_id = user_id
-        self.time = time
-        self.success = success
-        self.timestamp = timestamp
-
-
-class Transactions(db.Model):
-    __tablename__ = 'transactions'
-    _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sender_id = db.Column(db.Integer, nullable=False)
-    amount = db.Column(db.Integer, nullable=False)
-    receiver_id = db.Column(db.Integer, nullable=False)
-    timestamp = db.Column(db.Numeric, nullable=False)
-
-    def __init__(self, sender_id, amount, receiver_id, timestamp):
-        self.sender_id = sender_id
-        self.amount = amount
-        self.receiver_id = receiver_id
-        self.timestamp = timestamp
-        self.sender_name = None
-        self.receiver_name = None
+from tables import User, Work, Transactions, Items
+#configure DATABASE
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -103,7 +56,6 @@ def login():
 def register():
     if request.method == "POST":
         name = request.form.get("name")
-        mail = request.form.get("mail")
         cash = 0
         key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
         public_key = key_generator(10)
@@ -111,7 +63,7 @@ def register():
         # TO-DO check if this works
         if public_key in User.query.filter_by(public_key = public_key).all() or  key in User.query.filter_by(key = key).all():
             return redirect("/register")
-        new_data = User(name, mail, key, public_key, cash)
+        new_data = User(name, key, public_key, cash)
         db.session.add(new_data)
         db.session.commit()
         return render_template("register.html", key = key, registered = True, public_key = public_key)
@@ -224,12 +176,58 @@ def blockchain():
 @app.route("/shop", methods=["GET", "POST"])
 def shop():
     user = User.query.filter_by(_id = session["user_id"]).first()
+    shop_items = Items.query.all()
+    inventory = Items.query.all()
+    for row in shop_items:
+        row.owner_name = User.query.filter_by(_id = row.owner_id).first().name
     if request.method == "POST":
-        price = int(request.form.get('price'))*CURRENT_RATE
-        if user.cash < float(price):
-            rest = float(price) - float(user.cash)
+        items_str = request.form.get("cart_items")
+        items = items_str.split(",");
+        total = 0
+        # Calculate price
+        for item in shop_items:
+            if str(item._id) in items:
+                total += float(item.price)*CURRENT_RATE
+        if user.cash < float(total) and total > 0:
+            rest = float(total) - float(user.cash)
             return render_template("shop.html", inventory = inventory, rest = round(rest, 2))
+        ts = dt.now().timestamp()
+        # Change owner and add to blockchain shop -> user
+        for item in shop_items:
+            if str(item._id) in items:
+                item.owner_id = user._id
+                new_data = Transactions(1, item.name, session["user_id"], ts)
+                db.session.add(new_data)
+        user.cash -= round(total, 2);
+        user.cash = round(user.cash, 2)
+        # Add to Blockchain user -> Shop
+        new_data = Transactions(session["user_id"], round(total, 2), 1, ts)
+        db.session.add(new_data)
+        db.session.commit()
+        return redirect("/items")
     return render_template("shop.html", inventory = inventory, rest = None)
+
+@app.route("/items", methods=["GET", "POST"])
+def items():
+    items = Items.query.filter_by(owner_id = session["user_id"]).all()
+    if request.method == "POST":
+        ts = dt.now().timestamp()
+        receiver = request.form.get("key")
+        receiver_info = User.query.filter_by(public_key = receiver).first()
+        if receiver_info is None:
+            flash("This receiver does not exist", "error")
+            return render_template("items.html", items = items)
+        receiver_id = receiver_info._id
+        item = request.form.get("item")
+        # Query specific item to set the new owner
+        this_item = Items.query.filter_by(_id = item).first()
+        this_item.owner_id = receiver
+        new_data = Transactions(session["user_id"], this_item.name, receiver_id, ts)
+        db.session.add(new_data)
+        db.session.commit()
+        flash("Transaction successful", "success")
+    return render_template("items.html", items = items)
+
 
 @app.route("/about", methods=["GET", "POST"])
 def about():

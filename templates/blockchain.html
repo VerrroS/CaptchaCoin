@@ -20,7 +20,12 @@
               <tr>
                   <td>{{row.sender_name}}</td>
                   <td>{{row.receiver_name}}</td>
-                  <td>{{row.amount}}</td>
+                  <td>{% if row.amount|int != 0 %}
+                        {{row.amount}} Coins
+                    {% else %}
+                        {{row.amount}}
+                    {% endif %}
+                  </td>
                   <td>{{row.timestamp | datetime}}</td>
                </tr>
           {% endfor %}
