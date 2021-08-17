@@ -120,16 +120,16 @@ def validate():
         ts = dt.now().timestamp()
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
+        msg = key_input + " " + current_key
         if current_key == key_input:
             point = 1
             success = True
             user = User.query.filter_by(_id = session["user_id"]).first()
             user.cash = user.cash + point
             db.session.commit()
-            flash('+1 Coin', 'point')
+            flash(msg, 'point')
         else:
             success = False
-            msg = key_input + " " + current_key
             flash(msg, 'no_point')
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
