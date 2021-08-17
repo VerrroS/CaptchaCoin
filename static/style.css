@@ -164,7 +164,7 @@ img {
 }
 
 .cart_container {
-  background-color: lightgrey;
+  background-color: white;
   position: absolute;
   right: 0;
   padding: 10px;
@@ -179,6 +179,13 @@ img {
 .cart_container button {
   border: none;
   background-color: transparent;
+}
+
+.cart_container form, .cart_container input[type="submit"]{
+  background-color: black;
+  color: white;
+  border: none;
+  width: 100%;
 }
 
 .active {
