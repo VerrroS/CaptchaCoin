@@ -88,6 +88,9 @@ key = key_generator(5)
 @app.route("/work", methods=["GET", "POST"])
 @login_required
 def work():
+    # acess global variable key and st it to random key
+    global key
+    key = key_generator(5)
     # get current cash
     user = User.query.filter_by(_id = session["user_id"]).first()
     cash = user.cash
@@ -104,25 +107,19 @@ def work():
             if row.success == True:
                 success_count += 1
         sucess_rate = round(((success_count/ len(work_all))*100), 2)
-
-    # acess global variable key and st it to random key
-    global key
-    key = key_generator(5)
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
-
-
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
-    current_key = key
+    current_key = key.upper()
     if request.method == "POST":
         ts = dt.now().timestamp()
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
-        if current_key.upper() == key_input:
+        if current_key == key_input:
             point = 1
             success = True
             user = User.query.filter_by(_id = session["user_id"]).first()
@@ -131,7 +128,7 @@ def validate():
             flash('+1 Coin', 'point')
         else:
             success = False
-            msg = key_input + " " + current_key.upper()
+            msg = key_input + " " + current_key
             flash(msg, 'no_point')
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
