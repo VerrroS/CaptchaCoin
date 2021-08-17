@@ -110,12 +110,15 @@ def work():
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
+    print("WORK", key)
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
+
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
     global key
     current_key = key.upper()
+    print("VALIDATE", key)
     if request.method == "POST":
         ts = dt.now().timestamp()
         key_input = request.form.get('key').upper()
@@ -127,10 +130,11 @@ def validate():
             user = User.query.filter_by(_id = session["user_id"]).first()
             user.cash = user.cash + point
             db.session.commit()
-            flash(msg, 'point')
+            flash('1 Coin', 'point')
         else:
             success = False
-            flash(msg, 'no_point')
+            flash('try again', 'no_point')
+        print(msg)
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
         db.session.commit()
