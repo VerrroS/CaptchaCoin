@@ -221,7 +221,7 @@ def items():
         item = request.form.get("item")
         # Query specific item to set the new owner
         this_item = Items.query.filter_by(_id = item).first()
-        this_item.owner_id = receiver
+        this_item.owner_id = receiver_id
         new_data = Transactions(session["user_id"], this_item.name, receiver_id, ts)
         db.session.add(new_data)
         db.session.commit()
