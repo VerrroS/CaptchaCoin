@@ -6,12 +6,10 @@
 
 {% block main %}
 
+{% if items|length < 1 %}
+<h3>You have no items yet. <br> Visit our <a href="/shop">Shop</a></h3>
+{% else %}
 <h1>Your Items here</h1>
-
-{% if items == none %}
-<h3>You have no items yet. <br> Visit our <a href="/shop">Shop</a> t</h3>
-{% endif %}
-
 {% for message in get_flashed_messages() %}
 <div class="bg-dark text-light p-2">{{ message }}</div>
 {% endfor %}
@@ -24,7 +22,7 @@
       <th>value</th>
       <th>type</th>
       <th></th>
-      <th></th>
+      <th>Send to someone</th>
     </tr>
   </thead>
   <tbody>
@@ -46,4 +44,5 @@
 
 </table>
 
+{% endif %}
 {% endblock %}
