@@ -129,7 +129,8 @@ def validate():
                 flash('+1 Coin', 'point')
             else:
                 success = False
-                flash('try again', 'no_point')
+                msg = key_input + " " + key.upper()
+                flash(msg, 'no_point')
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
         db.session.commit()
