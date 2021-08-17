@@ -116,11 +116,12 @@ def work():
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
+    current_key = key
         if request.method == "POST":
             ts = dt.now().timestamp()
             key_input = request.form.get('key').upper()
             time = request.form.get('time')
-            if key.upper() == key_input:
+            if current_key.upper() == key_input:
                 point = 1
                 success = True
                 user = User.query.filter_by(_id = session["user_id"]).first()
@@ -129,7 +130,7 @@ def validate():
                 flash('+1 Coin', 'point')
             else:
                 success = False
-                msg = key_input + " " + key.upper()
+                msg = key_input + " " + current_key.upper()
                 flash(msg, 'no_point')
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
