@@ -114,24 +114,25 @@ def work():
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
 
+
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
     current_key = key
-        if request.method == "POST":
-            ts = dt.now().timestamp()
-            key_input = request.form.get('key').upper()
-            time = request.form.get('time')
-            if current_key.upper() == key_input:
-                point = 1
-                success = True
-                user = User.query.filter_by(_id = session["user_id"]).first()
-                user.cash = user.cash + point
-                db.session.commit()
-                flash('+1 Coin', 'point')
-            else:
-                success = False
-                msg = key_input + " " + current_key.upper()
-                flash(msg, 'no_point')
+    if request.method == "POST":
+        ts = dt.now().timestamp()
+        key_input = request.form.get('key').upper()
+        time = request.form.get('time')
+        if current_key.upper() == key_input:
+            point = 1
+            success = True
+            user = User.query.filter_by(_id = session["user_id"]).first()
+            user.cash = user.cash + point
+            db.session.commit()
+            flash('+1 Coin', 'point')
+        else:
+            success = False
+            msg = key_input + " " + current_key.upper()
+            flash(msg, 'no_point')
         new_data = Work(session["user_id"],time, success, ts)
         db.session.add(new_data)
         db.session.commit()
