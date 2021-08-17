@@ -114,6 +114,7 @@ def work():
 
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
+    global key
     current_key = key.upper()
     if request.method == "POST":
         ts = dt.now().timestamp()
