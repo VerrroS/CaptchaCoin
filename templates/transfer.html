@@ -64,8 +64,16 @@
     }
 
      function position(){
-       stats_width = info_container.querySelector("form").getBoundingClientRect().width;
-       info_container.style.setProperty('left', `-${stats_width + 5}px`);
+       if(isMobile){
+         stats_height = info_container.querySelector("form").getBoundingClientRect().height;
+         info_container.style.setProperty('top', "0px");
+         info_container.style.setProperty('left', "50%");
+       }
+       else {
+         stats_width = info_container.querySelector("form").getBoundingClientRect().width;
+         info_container.style.setProperty('left', `-${stats_width + 5}px`);
+         info_container.style.setProperty('top', "20%");
+       }
      }
 
      function open_stats() {
