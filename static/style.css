@@ -19,6 +19,12 @@ h1{
   z-index: 1;
 }
 
+.overflow{
+  width: 100vw;
+  overflow-x: auto;
+}
+}
+
 #iamnotarobot{
   width: 100%;
   height: 100%;
