@@ -57,7 +57,7 @@ def register():
     if request.method == "POST":
         name = request.form.get("name")
         cash = 0
-        key = generate_password_hash(name, method='pbkdf2:sha256', salt_length=4)
+        key = "CC$" + key_generator(15)
         public_key = key_generator(10)
         # Check if keys are already in user
         # TO-DO check if this works

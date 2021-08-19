@@ -6,30 +6,31 @@
 
 {% block main %}
     <h2>Blockchain</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Sender</th>
-          <th>Receiver</th>
-          <th>Amount</th>
-          <th>Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-          {% for row in table %}
-              <tr>
-                  <td>{{row.sender_name}}</td>
-                  <td>{{row.receiver_name}}</td>
-                  <td>{% if row.amount|int != 0 %}
-                        {{row.amount}} Coins
-                    {% else %}
-                        {{row.amount}}
-                    {% endif %}
-                  </td>
-                  <td>{{row.timestamp | datetime}}</td>
-               </tr>
-          {% endfor %}
-      </tbody>
-
-    </table>
+    <div class="overflow">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for row in table %}
+                <tr>
+                    <td>{{row.sender_name}}</td>
+                    <td>{{row.receiver_name}}</td>
+                    <td>{% if row.amount|int != 0 %}
+                          {{row.amount}} Coins
+                      {% else %}
+                          {{row.amount}}
+                      {% endif %}
+                    </td>
+                    <td>{{row.timestamp | datetime}}</td>
+                 </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}

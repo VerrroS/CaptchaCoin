@@ -13,36 +13,37 @@
 {% for message in get_flashed_messages() %}
 <div class="bg-dark text-light p-2">{{ message }}</div>
 {% endfor %}
+<div class="overflow">
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>name</th>
+        <th>value</th>
+        <th>type</th>
+        <th></th>
+        <th>Send to someone</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td><img src="{{item.img}}" alt="" width="200px"></td>
+                <td>{{item.name}}</td>
+                <td>{{item.price | coins}} Coins</td>
+                <td>{{item.type}}</td>
+                <td><a href="{{item.link}}" download target="_blank">Download</a></td>
+                <td><form action="/items" method="post">
+                  <input type="text" name="key" placeholder="put in public key here">
+                  <input type="text" name="item" value="{{item._id}}" class="d-none">
+                  <input type="submit" name="" value="Send">
+                </form></td>
+             </tr>
+        {% endfor %}
+    </tbody>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>name</th>
-      <th>value</th>
-      <th>type</th>
-      <th></th>
-      <th>Send to someone</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for item in items %}
-          <tr>
-              <td><img src="{{item.img}}" alt="" width="200px"></td>
-              <td>{{item.name}}</td>
-              <td>{{item.price | coins}} Coins</td>
-              <td>{{item.type}}</td>
-              <td><a href="{{item.link}}" download target="_blank">Download</a></td>
-              <td><form action="/items" method="post">
-                <input type="text" name="key" placeholder="put in public key here">
-                <input type="text" name="item" value="{{item._id}}" class="d-none">
-                <input type="submit" name="" value="Send">
-              </form></td>
-           </tr>
-      {% endfor %}
-  </tbody>
-
-</table>
+  </table>
+</div>
 
 {% endif %}
 {% endblock %}
