@@ -104,7 +104,14 @@
             All rights reserved by CaptchaCoin.
         </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+        <script src ="/static/js/layout.js"></script>
         <script type="text/javascript">
+
+        /*enable transition when page i sloades by removing preload class*/
+        window.addEventListener('load', (event) => {
+        document.querySelector('body').classList.remove('preload');
+        })
+
         function class_mobile (){if (isMobile){
         document.querySelector("body").classList.add("mobile");
         }
