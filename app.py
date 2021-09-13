@@ -10,6 +10,7 @@ from datetime import datetime
 from helpers import login_required, key_generator, datetime, dollar, coins, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
+from threading import Lock
 from datetime import datetime as dt
 
 # Configure application
