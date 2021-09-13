@@ -33,9 +33,37 @@
 
     </head>
 
-    <body class={% block body_class %}{% endblock %}>
+    <body class={% block body_class %}preload{% endblock %}>
 
-        <nav class="navbar navbar-expand-md navbar-light bg-light border">
+        <!-- Navbar for mobile-->
+        <nav class="navbar-mobile d-none">
+              <div class="burger_btn pt-2 pl-2">
+                <span class="iconify" font-size="28px" data-icon="icon-park-outline:hamburger-button"></span>
+              </div>
+              <div class="menu closed">
+                <div>
+                  <img src="/static/logo.svg" alt="CaptchaCoin logo" width="100px">
+                  <ul>
+                    <li><a class="nav-link" href="/work">Work</a>
+                      <ul>
+                        <li> Insights </li>
+                      </ul>
+                    </li>
+                    <li><a class="nav-link" href="/shop">Shop</a></li>
+                    <li><a class="nav-link" href="/items">Inventory</a></li>
+                    <li><a class="nav-link" href="/transfer">Transfer</a>
+                      <ul>
+                        <li> Looking for someone?</li>
+                      </ul>
+                    </li>
+                    <li><a class="nav-link" href="/blockchain">Blockchain</a></li>
+
+                  </ul>
+                </div>
+              </div>
+        </nav>
+        <!-- Navbar for desktop-->
+        <nav class="navbar navbar-expand-md navbar-light bg-light border navbar-desktop">
             <a class="navbar-brand" href="/">
               <img src="/static/logo.svg" alt="CaptchaCoin logo" width="75px">
             </a>
