@@ -7,7 +7,13 @@ stats_width = stats_container.querySelector(".text-left").getBoundingClientRect(
 stats_height = stats_container.querySelector(".text-left").getBoundingClientRect().height;
 const sound = document.querySelector(".sound");
 
+
 function position() {
+  if (document.querySelector('body').classList.contains('mobile'))
+  {
+    stats_container.classList.add('d-none');
+  }
+
   captcha_coords = captcha.getBoundingClientRect()
   if(isMobile){
     stats_container.style.setProperty('top', `-${stats_height - 60}px`);
@@ -63,6 +69,7 @@ function timer(e){
    work_submit.value = time;
  }
 }
+
 
 function timer_stop(){
  work_input.dataset.added = "0"

@@ -10,6 +10,7 @@ from datetime import datetime
 from helpers import login_required, key_generator, datetime, dollar, coins, CURRENT_RATE
 from captcha.image import ImageCaptcha
 import base64
+from threading import Lock
 from datetime import datetime as dt
 
 # Configure application
@@ -114,16 +115,19 @@ def work():
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
 
+lock = Lock()
 @app.route("/validate", methods=["GET", "POST"])
 def validate():
     latest_work = Work.query.filter_by(user_id = session["user_id"]).order_by(Work._id.desc()).first()
     current_key = latest_work.key.upper()
-    if request.method == "POST":
+    if request.method == "POST" and lock:
+        lock.acquire()
         ts = dt.now().timestamp()
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
+        point = 1
+        # Prevent user from submitting multiple times and getting multiple points
         if current_key == key_input:
-            point = 1
             success = True
             user = User.query.filter_by(_id = session["user_id"]).first()
             user.cash = user.cash + point
@@ -136,6 +140,7 @@ def validate():
         latest_work.timestamp = ts
         latest_work.time = time
         db.session.commit()
+        lock.release()
         return redirect("/work")
 
 @app.route("/transfer", methods=["GET", "POST"])
