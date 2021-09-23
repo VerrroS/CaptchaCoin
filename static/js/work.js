@@ -9,7 +9,7 @@ const sound = document.querySelector(".sound");
 
 
 function position() {
-  if (document.querySelector('body').classList.contains('mobile'))
+  if (isMobile)
   {
     stats_container.classList.add('d-none');
   }
@@ -101,12 +101,8 @@ sound.addEventListener('click', sound_toggle);
 stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
 window.addEventListener('DOMContentLoaded', position);
-<<<<<<< Updated upstream
-window.addEventListener('DOMContentLoaded', timer);
-=======
 window.addEventListener('DOMContentLoaded', sound_check);
 work_input.addEventListener('focus', timer);
->>>>>>> Stashed changes
 work_input.addEventListener('focusout', timer_stop);
 work_input.addEventListener('focus', timer);
 work_submit.addEventListener('click', timer);
