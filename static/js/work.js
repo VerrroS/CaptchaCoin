@@ -15,15 +15,10 @@ function position() {
   }
 
   captcha_coords = captcha.getBoundingClientRect()
-  if(isMobile){
-    stats_container.style.setProperty('top', `-${stats_height - 60}px`);
-    stats_container.style.setProperty('left', "50%");
-  }
-  else {
-    stats_container.style.setProperty('left', `-${stats_width + 5}px`);
-    stats_container.style.setProperty('top', "20%");
-    if (alert != null)
-    {
+  stats_container.style.setProperty('left', `-${stats_width + 5}px`);
+  stats_container.style.setProperty('top', "20%");
+  if (alert != null)
+  {
       alert_coords = alert.getBoundingClientRect();
       const coords = {
         top: captcha_coords.top - (alert_coords.width/2),
@@ -41,7 +36,6 @@ function position() {
          }
       }
     }
-  }
 }
 
 function open_stats() {
@@ -87,6 +81,10 @@ function sound_toggle(){
 }
 
 function sound_check(){
+ if (isMobile){
+   sound.classList.add("d-none");
+   localStorage.removeItem('sound')
+ }
  if (localStorage["sound"] != null){
    sound.src = "/static/on.svg"
  }
@@ -103,7 +101,12 @@ sound.addEventListener('click', sound_toggle);
 stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
 window.addEventListener('DOMContentLoaded', position);
+<<<<<<< Updated upstream
 window.addEventListener('DOMContentLoaded', timer);
+=======
+window.addEventListener('DOMContentLoaded', sound_check);
+work_input.addEventListener('focus', timer);
+>>>>>>> Stashed changes
 work_input.addEventListener('focusout', timer_stop);
 work_input.addEventListener('focus', timer);
 work_submit.addEventListener('click', timer);
