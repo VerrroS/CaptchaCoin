@@ -114,6 +114,22 @@ def work():
     encoded_img_data = base64.b64encode(data.getvalue())
     return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
+@app.route("/insights", methods=["GET"])
+@login_required
+def insights():
+    avg_time = 0
+    sucess_rate = 0
+    work = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).first()
+    if work is not None:
+        time = work.time
+        avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
+        work_all =  Work.query.all()
+        success_count = 0
+        for row in work_all:
+            if row.success == True:
+                success_count += 1
+        sucess_rate = round(((success_count/ len(work_all))*100), 2)
+    return render_template("insights.html", avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
 lock = Lock()
 @app.route("/validate", methods=["GET", "POST"])
@@ -182,6 +198,7 @@ def blockchain():
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
+@login_required
 def shop():
     user = User.query.filter_by(_id = session["user_id"]).first()
     shop_items = Items.query.all()
@@ -217,6 +234,7 @@ def shop():
 
 @app.route("/items", methods=["GET", "POST"])
 def items():
+    all_user = User.query.all()
     items = Items.query.filter_by(owner_id = session["user_id"]).all()
     if request.method == "POST":
         ts = dt.now().timestamp()
@@ -234,7 +252,7 @@ def items():
         db.session.add(new_data)
         db.session.commit()
         flash("Transaction successful", "success")
-    return render_template("items.html", items = items)
+    return render_template("items.html", items = items, persons = all_user)
 
 
 @app.route("/about", methods=["GET", "POST"])

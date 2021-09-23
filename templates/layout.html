@@ -37,28 +37,31 @@
 
         <!-- Navbar for mobile-->
         <nav class="navbar-mobile d-none">
-              <div class="burger_btn pt-2 pl-2">
-                <span class="iconify" font-size="28px" data-icon="icon-park-outline:hamburger-button"></span>
-              </div>
+          <div class="row">
+            <div class="burger_btn pt-2 pl-2">
+              <span class="iconify" font-size="28px" data-icon="icon-park-outline:hamburger-button"></span>
+            </div>
+            {% if not session.user_id %}
+            <a class="nav-link" href="/register">Register</a>
+            {% endif %}
+          </div>
               <div class="menu closed">
                 <div>
+                  <a href="/">
                   <img src="/static/logo.svg" alt="CaptchaCoin logo" width="100px">
+                  </a>
                   <ul>
-                    <li><a class="nav-link" href="/work">Work</a>
-                      <ul>
-                        <li> Insights </li>
-                      </ul>
-                    </li>
-                    <li><a class="nav-link" href="/shop">Shop</a></li>
-                    <li><a class="nav-link" href="/items">Inventory</a></li>
-                    <li><a class="nav-link" href="/transfer">Transfer</a>
-                      <ul>
-                        <li> Looking for someone?</li>
-                      </ul>
-                    </li>
-                    <li><a class="nav-link" href="/blockchain">Blockchain</a></li>
+                    <li><a href="/work">Work</a> </li>
+                    <li> <a href="/insights">Insights </a></li>
+                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="/items">Inventory</a></li>
+                    <li><a href="/transfer">Transfer</a></li>
+                    <li><a href="/blockchain">Blockchain</a></li>
 
                   </ul>
+                  <form action="/logout" method="get">
+                  <input  type="submit" value="logout" class="btn btn-secondary btn-sm">
+                  </form>
                 </div>
               </div>
         </nav>

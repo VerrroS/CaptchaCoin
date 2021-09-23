@@ -34,7 +34,12 @@
                 <td>{{item.type}}</td>
                 <td><a href="{{item.link}}" download target="_blank">Download</a></td>
                 <td><form action="/items" method="post">
-                  <input type="text" name="key" placeholder="put in public key here">
+                  <input type="text" name="key" placeholder="put in public key here" class="search">
+                  <ul class="suggestions">
+                    {% for person in persons %}
+                          <li class="d-none person" data-name="{{person.name}}">{{person.name}} - <span class="bg-dark text-light">{{person.public_key}}</span></li>
+                    {% endfor %}
+                  </ul>
                   <input type="text" name="item" value="{{item._id}}" class="d-none">
                   <input type="submit" name="" value="Send">
                 </form></td>
@@ -44,6 +49,8 @@
 
   </table>
 </div>
+
+<script src="/static/js/transfer.js"></script>
 
 {% endif %}
 {% endblock %}

@@ -1,8 +1,8 @@
 const search = document.querySelector(".search");
 const suggestions = document.querySelector(".suggestions");
 const results = document.querySelectorAll(".person");
-const info_container = document.querySelector(".info_container");
-const info_btn = info_container.querySelector(".vertical");
+const adress_btn = document.querySelector(".adress_btn");
+const adress = document.querySelector(".adress");
 
 
 function display_matches(){
@@ -17,18 +17,6 @@ function display_matches(){
    }});
 }
 
- function position(){
-   if(isMobile){
-     stats_height = info_container.querySelector("form").getBoundingClientRect().height;
-     info_container.style.setProperty('top', "0px");
-     info_container.style.setProperty('left', "50%");
-   }
-   else {
-     stats_width = info_container.querySelector("form").getBoundingClientRect().width;
-     info_container.style.setProperty('left', `-${stats_width + 5}px`);
-     info_container.style.setProperty('top', "20%");
-   }
- }
 
  function open_stats() {
    if (info_container.classList.contains("active")) {
@@ -36,11 +24,24 @@ function display_matches(){
    else {
       info_container.classList.add("active");
   }
-  position();
 }
 
-  position();
-  info_btn.addEventListener('click', open_stats);
+  function open_stats_mobile(){
+    console.log("open");
+    const info_field = document.createElement('div');
+    const form = info_container.innerHTML;
+    console.log(form);
+    info_field.innerHTML = form;
+    adress.append(info_field);
+  }
+
+  function choose_person(e){
+    let key = this.querySelector("span").innerHTML;
+    search.value = key;
+  }
+
   search.addEventListener("change", display_matches);
   search.addEventListener("keyup", display_matches);
-  window.addEventListener('resize', position);
+  results.forEach((item, i) => {
+  item.addEventListener("click", choose_person);
+  });
