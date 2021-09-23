@@ -55,24 +55,24 @@ function open_stats() {
 let time
 let start
 function timer(e){
- if (e.type == 'keydown'){
+ if (e.type == 'click'){
+   end = e.timeStamp;
+   time = Math.round(end - start)/1000;
+   work_submit.value = time;
+ }
+ else
+ {
    if (work_input.dataset.added == "0")
    {
      start = e.timeStamp;
      work_input.dataset.added = "1"
    }
  }
- else
- {
-   end = e.timeStamp;
-   time = Math.round(end - start)/1000;
-   work_submit.value = time;
- }
 }
 
 
 function timer_stop(){
- work_input.dataset.added = "0"
+ work_input.dataset.added = "0";
 }
 
 function sound_toggle(){
@@ -96,12 +96,14 @@ function sound_check(){
  }
 }
 
+
 sound_check();
 position();
 sound.addEventListener('click', sound_toggle);
 stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
 window.addEventListener('DOMContentLoaded', position);
-work_input.addEventListener('keydown', timer);
+window.addEventListener('DOMContentLoaded', timer);
 work_input.addEventListener('focusout', timer_stop);
+work_input.addEventListener('focus', timer);
 work_submit.addEventListener('click', timer);
