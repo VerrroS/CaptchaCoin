@@ -102,7 +102,7 @@ stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
 window.addEventListener('DOMContentLoaded', position);
 window.addEventListener('DOMContentLoaded', sound_check);
+window.addEventListener('DOMContentLoaded', timer);
 work_input.addEventListener('focus', timer);
 work_input.addEventListener('focusout', timer_stop);
-work_input.addEventListener('focus', timer);
 work_submit.addEventListener('click', timer);
