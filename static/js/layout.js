@@ -17,14 +17,12 @@ function open_menu(){
   {
      menu.classList.remove('closed');
   }
-  else {
-    menu.classList.add('closed');
-  }
 }
 
 function close_menu() {
-  menu.classList.remove('closed');
+  menu.classList.add('closed');
 }
 
 window.addEventListener('DOMContentLoaded', layout);
 burger_btn.addEventListener('click', open_menu);
+menu.addEventListener('click', close_menu);
