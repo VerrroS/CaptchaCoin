@@ -198,6 +198,7 @@ def blockchain():
     return render_template("blockchain.html", table = table)
 
 @app.route("/shop", methods=["GET", "POST"])
+@login_required
 def shop():
     user = User.query.filter_by(_id = session["user_id"]).first()
     shop_items = Items.query.all()
