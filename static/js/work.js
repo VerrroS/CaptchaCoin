@@ -21,15 +21,14 @@ function position() {
   captcha_coords = captcha.getBoundingClientRect()
   if (alert != null)
   {
-      alert_coords = alert.getBoundingClientRect();
       const coords = {
-        top: captcha_coords.top - (alert_coords.width/2),
-        left: captcha_coords.left - (alert_coords.width/2),
+        top: captcha_coords.top - (25),
+        left: captcha_coords.left - (25),
       }
 
       alert.style.setProperty('top', `${coords.top}px`);
       if(isMobile){
-          alert.style.setProperty('left', `${(window.innerWidth/2) - (alert_coords.width/2) }px`);
+          alert.style.setProperty('left', `${(window.innerWidth/2) - (25) }px`);
       }
       else {
           alert.style.setProperty('left', `${coords.left}px`);
@@ -102,8 +101,6 @@ function sound_check(){
 }
 
 
-sound_check();
-position();
 sound.addEventListener('click', sound_toggle);
 stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
