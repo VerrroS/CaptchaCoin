@@ -317,6 +317,12 @@ form .btn {
     animation:jello-vertical 0.9s both ;
 }
 
+.alert_mobile{
+  top:0;
+  left:0;
+  margin: 5px;
+}
+
 .point {
     background-color: #b6ffb6;
 }

@@ -21,17 +21,16 @@ function position() {
   captcha_coords = captcha.getBoundingClientRect()
   if (alert != null)
   {
-      const coords = {
-        top: captcha_coords.top - (25),
-        left: captcha_coords.left - (25),
-      }
-
-      alert.style.setProperty('top', `${coords.top}px`);
-      if(isMobile){
-          alert.style.setProperty('left', `${(window.innerWidth/2) - (25) }px`);
+      if(isMobile && !alert.classList.contains("alert_mobile")){
+          alert.classList.add("alert_mobile");
       }
       else {
+          const coords = {
+          top: captcha_coords.top - (25),
+          left: captcha_coords.left - (25),
+        }
           alert.style.setProperty('left', `${coords.left}px`);
+          alert.style.setProperty('top', `${coords.top}px`);
       }
       if(localStorage["sound"] != null){
          if (alert.classList.contains("point")){
