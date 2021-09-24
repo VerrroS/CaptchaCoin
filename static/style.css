@@ -237,17 +237,6 @@ img {
   flex-direction: row-reverse;
 }
 
-.mobile .info_container,.mobile .stats_container {
-    transition: top .5s;
-    flex-direction: column-reverse;
-    left: 50%;
-    transform: translate(-50%);
-    width: fit-content;
-  }
-
-.info_container form {
-  margin: inherit;
-}
 
 .cart_container {
   background-color: white;
