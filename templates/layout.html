@@ -26,14 +26,12 @@
         else {
         isMobile = false;
         }}
-
-        window.addEventListener('resize', is_Mobile);
         </script>
         <title>CaptchaCoin: {% block title %}{% endblock %}</title>
 
     </head>
 
-    <body class={% block body_class %}preload{% endblock %}>
+    <body class={% block body_class %}{% endblock %}>
 
         <!-- Navbar for mobile-->
         <nav class="navbar-mobile d-none">
@@ -110,11 +108,6 @@
         <script src ="/static/js/layout.js"></script>
         <script type="text/javascript">
 
-        /*enable transition when page i sloades by removing preload class*/
-        window.addEventListener('load', (event) => {
-        document.querySelector('body').classList.remove('preload');
-        })
-
         function class_mobile (){if (isMobile){
         document.querySelector("body").classList.add("mobile");
         }
@@ -124,8 +117,6 @@
         }}
         is_Mobile();
         class_mobile();
-        window.addEventListener('resize', is_Mobile);
-        window.addEventListener('resize',class_mobile);
         </script>
         {% block scripts%}{% endblock %}
     </body>
