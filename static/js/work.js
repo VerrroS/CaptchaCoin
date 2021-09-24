@@ -13,20 +13,27 @@ function position() {
   {
     stats_container.classList.add('d-none');
   }
+  else {
+    stats_container.style.setProperty('left', `-${stats_width + 5}px`);
+    stats_container.style.setProperty('top', "20%");
+  }
 
   captcha_coords = captcha.getBoundingClientRect()
-  stats_container.style.setProperty('left', `-${stats_width + 5}px`);
-  stats_container.style.setProperty('top', "20%");
   if (alert != null)
   {
       alert_coords = alert.getBoundingClientRect();
       const coords = {
         top: captcha_coords.top - (alert_coords.width/2),
-        left: captcha_coords.left - (alert_coords.width/2)
+        left: captcha_coords.left - (alert_coords.width/2),
       }
 
       alert.style.setProperty('top', `${coords.top}px`);
-      alert.style.setProperty('left', `${coords.left}px`);
+      if(isMobile){
+          alert.style.setProperty('left', `${(window.innerWidth/2) - (alert_coords.width/2) }px`);
+      }
+      else {
+          alert.style.setProperty('left', `${coords.left}px`);
+      }
       if(localStorage["sound"] != null){
          if (alert.classList.contains("point")){
            document.querySelector(".win").play();
