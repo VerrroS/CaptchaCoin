@@ -227,7 +227,8 @@ img {
   margin: 0 20px;
 }
 
-.info_container, .stats_container {
+.stats_container {
+  left:-1000px;
   padding: 5px;
   position: absolute;
   background-color: #6c757d;
