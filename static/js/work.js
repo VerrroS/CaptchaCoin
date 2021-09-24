@@ -24,7 +24,7 @@ function position() {
       if(isMobile && !alert.classList.contains("alert_mobile")){
           alert.classList.add("alert_mobile");
       }
-      else {
+      else if(!isMobile){
           const coords = {
           top: captcha_coords.top - (25),
           left: captcha_coords.left - (25),
