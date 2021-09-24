@@ -9,7 +9,6 @@ const sound = document.querySelector(".sound");
 function position() {
   if (!isMobile)
   {
-    console.log(stats_width);
     stats_container.style.setProperty('left', `-${250 + 5}px`);
     stats_container.style.setProperty('top', "20%");
     stats_container.style.setProperty('display', "flex");
