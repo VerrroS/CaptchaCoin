@@ -228,13 +228,13 @@ img {
 }
 
 .stats_container {
-  left:-1000px;
+  width: 300px;
+  display: none;
   padding: 5px;
   position: absolute;
   background-color: #6c757d;
   color: white;
   transition: left .5s;
-  display: flex;
   flex-direction: row-reverse;
 }
 
@@ -266,11 +266,6 @@ img {
 
 .active {
   left: 0px!important;
-}
-
-.mobile .active{
-  top: 60px!important;
-  left: 50%!important;
 }
 
 .hello{
@@ -315,12 +310,14 @@ form .btn {
     border-radius: 50%;
     -webkit-animation: jello-vertical 0.9s both;
     animation:jello-vertical 0.9s both ;
+    display: none;
 }
 
 .alert_mobile{
   top:0;
   left:0;
   margin: 5px;
+  display: block;
 }
 
 .point {
@@ -344,9 +341,6 @@ form .btn {
   padding: 10px 5px 10px 15px;
 }
 
-.mobile .vertical {
-  writing-mode: horizontal-tb;
-}
 
 /* Ribbon from NxWorld https://www.nxworld.net/pure-css-corner-ribbon.html */
 /* common */

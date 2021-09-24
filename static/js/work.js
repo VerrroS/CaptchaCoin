@@ -3,19 +3,16 @@ const work_submit = document.querySelector("#work_submit")
 const captcha = document.querySelector("#captcha");
 const alert = document.querySelector(".alert");
 const stats_container = document.querySelector(".stats_container");
-stats_width = stats_container.querySelector(".text-left").getBoundingClientRect().width;
-stats_height = stats_container.querySelector(".text-left").getBoundingClientRect().height;
 const sound = document.querySelector(".sound");
 
 
 function position() {
-  if (isMobile)
+  if (!isMobile)
   {
-    stats_container.classList.add('d-none');
-  }
-  else {
-    stats_container.style.setProperty('left', `-${stats_width + 5}px`);
+    console.log(stats_width);
+    stats_container.style.setProperty('left', `-${250 + 5}px`);
     stats_container.style.setProperty('top', "20%");
+    stats_container.style.setProperty('display', "flex");
   }
 
   captcha_coords = captcha.getBoundingClientRect()
