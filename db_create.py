@@ -5,7 +5,7 @@ import os
 db.create_all()
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('HEROKU_POSTGRESQL_NAVY_URL')
 
 # initialize shop as 1st user
 name = "Shop"
@@ -46,7 +46,7 @@ def populate_shop():
     for i in range(6):
           id = i+ 13
           name = "desktop background"
-          price = 0.05
+          price = 0.1
           img = "/static/background_q.png"
           type = "png"
           duration = 0

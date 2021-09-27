@@ -21,7 +21,7 @@ from tables import User, Work, Transactions, Items
 #configure DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_1')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('HEROKU_POSTGRESQL_NAVY_URL')
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -31,6 +31,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Configute the amount of false captchas befor user gets banned
+BAN_COUNT = 7
 
 @app.route("/")
 @login_required
@@ -100,10 +102,19 @@ def work():
     time = 0
     avg_time = 0
     sucess_rate = 0
+    ban = False
     if work is not None:
         time = work.time
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
-        work_all =  Work.query.all()
+        wrong_count = 0
+        wrong = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).all()
+        for i in range(BAN_COUNT):
+            if wrong[i].success is False:
+                wrong_count += 1
+            i -= 1
+        if wrong_count >= BAN_COUNT:
+            ban = True
+        work_all =  Work.query.filter_by(user_id = session["user_id"]).all()
         success_count = 0
         for row in work_all:
             if row.success == True:
@@ -112,7 +123,7 @@ def work():
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate, ban = ban)
 
 @app.route("/insights", methods=["GET"])
 @login_required
@@ -123,7 +134,7 @@ def insights():
     if work is not None:
         time = work.time
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
-        work_all =  Work.query.all()
+        work_all =  Work.query.filter_by(user_id = session["user_id"]).all()
         success_count = 0
         for row in work_all:
             if row.success == True:
