@@ -153,7 +153,7 @@ def validate():
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
         # check if time is reasonable if not set it to 10 seconds
-        if time > 180 or time < 0:
+        if int(time) > 180 or int(time) < 0:
             time = 10
         point = 1
         if current_key == key_input:
