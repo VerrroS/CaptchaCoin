@@ -153,8 +153,9 @@ def validate():
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
         point = 1
-        # Prevent user from submitting multiple times and getting multiple points
         if current_key == key_input:
+            # stting the current key immediately to x to prevent user from submitting multiple times and getting multiple points
+            current_key = "x"
             success = True
             user = User.query.filter_by(_id = session["user_id"]).first()
             user.cash = user.cash + point
