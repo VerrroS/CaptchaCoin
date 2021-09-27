@@ -60,6 +60,7 @@ function position() {
         }
           alert.style.setProperty('left', `${coords.left}px`);
           alert.style.setProperty('top', `${coords.top}px`);
+					alert.style.setProperty('display', 'block');
       }
       if(localStorage["sound"] != null){
          if (alert.classList.contains("point")){
