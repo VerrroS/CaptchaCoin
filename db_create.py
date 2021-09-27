@@ -5,7 +5,7 @@ import os
 db.create_all()
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test8.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('HEROKU_POSTGRESQL_NAVY_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL_2')
 
 # initialize shop as 1st user
 name = "Shop"
