@@ -64,8 +64,8 @@ list-style-type: none;
 }
 
 .menu ul {
-  padding: 0;
-  line-height: 2;
+  padding: .5rem;
+  line-height: 2.5;
   text-align: left;
 }
 
