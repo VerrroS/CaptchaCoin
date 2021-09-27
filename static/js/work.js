@@ -4,7 +4,40 @@ const captcha = document.querySelector("#captcha");
 const alert = document.querySelector(".alert");
 const stats_container = document.querySelector(".stats_container");
 const sound = document.querySelector(".sound");
+const ban = document.querySelector("#ban");
 
+
+function timer(seconds){
+//clear any existing timers
+clearInterval(countdown);
+const now = Date.now();
+const then = now + seconds * 1000;
+displayTimeLeft(seconds);
+displayEndTime(then);
+
+countdown = setInterval(() =>{
+const secondsLeft = Math.round((then - Date.now())/ 1000);
+//check if to stop it
+if(secondsLeft < 0){
+	clearInterval(countdown)
+	return;
+}
+//display it
+displayTimeLeft(secondsLeft);
+}, 1000);
+}
+
+function displayTimeLeft(seconds){
+	console.log(seconds)
+}
+
+function displayEndTime(timestamp){
+console.log(timestamp)
+}
+
+function ban_function(){
+   timer(60);
+}
 
 function position() {
   if (!isMobile)
@@ -95,7 +128,7 @@ function sound_check(){
  }
 }
 
-
+ban_function();
 sound.addEventListener('click', sound_toggle);
 stats_container.addEventListener('click', open_stats);
 window.addEventListener('resize', position);
