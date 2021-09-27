@@ -10,6 +10,26 @@ body{
   justify-content: space-between;
 }
 
+.space_between{
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+}
+
+
+.cpy_btn{
+  border-radius: 2px;
+  padding: 3px;
+  color: #343a40;
+  background-color: #f8f9fa;
+  margin: 1px;
+}
+
+.cpy_btn:hover{
+  border: 1px solid white;
+  margin: 0;
+}
+
 /*disable all transition on page load*/
 .preload * {
   -webkit-transition: none !important;
@@ -64,8 +84,8 @@ list-style-type: none;
 }
 
 .menu ul {
-  padding: 0;
-  line-height: 2;
+  padding: .5rem;
+  line-height: 2.5;
   text-align: left;
 }
 
@@ -74,9 +94,7 @@ list-style-type: none;
 }
 
 .overflow{
-  width: 100vw;
   overflow-x: auto;
-}
 }
 
 #iamnotarobot{
@@ -129,6 +147,10 @@ list-style-type: none;
 }
 
 .mobile .detail h2 {
+  font-size: 1rem;
+}
+
+.mobile h4 {
   font-size: 1rem;
 }
 

@@ -6,16 +6,20 @@
 
 {% block main %}
       {% if registered %}
-
+      <h2>This is your public-key</h2>
+      <p>Others can sent you coin with this key</p>
+      <h5 class="bg-dark text-light p-2 col-xl-4 col-md-6 col-sm-12 m-auto">{{public_key}}
+    </h5>
           <h2>Your wallet key</h2>
           <p>With this key you can log into your Account
           <br>
           Make sure to save the key at a secure place.</p>
-          <p class="bg-dark text-light p-2">{{key}}</p>
-          <h2>This is your public-key</h2>
-          <p>Others can sent you coin with this key</p>
-          <h3 class="bg-dark text-light p-2">{{public_key}}</h3>
-          <a href="/login"><button class="btn btn-secondary">Login</button></a>
+          <h4 class="bg-dark text-light p-2 space_between col-xl-4 col-md-6 col-sm-12"> {{key}}
+            <div class="cpy_btn" data-value="{{key}}">
+              Copy
+            </div>
+          </h4>
+          <a href="/login"><button class="btn btn-secondary m-2">Login</button></a>
 
       {% else %}
 
@@ -26,4 +30,6 @@
           </form>
 
       {% endif %}
+
+      <script src="/static/js/register.js"></script>
 {% endblock %}
