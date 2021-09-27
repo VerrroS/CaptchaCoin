@@ -108,10 +108,10 @@ def work():
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
         wrong_count = 0
         wrong = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).all()
-        for i in range(BAN_COUNT):
-            if wrong[i].success is False:
-                wrong_count += 1
-            i -= 1
+        if len(wrong) >= BAN_COUNT:
+            for i in range(BAN_COUNT):
+                if wrong[i].success is False:
+                    wrong_count += 1
         if wrong_count >= BAN_COUNT:
             ban = True
         work_all =  Work.query.filter_by(user_id = session["user_id"]).all()
