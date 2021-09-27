@@ -152,6 +152,9 @@ def validate():
         ts = dt.now().timestamp()
         key_input = request.form.get('key').upper()
         time = request.form.get('time')
+        # check if time is reasonable if not set it to 10 seconds
+        if time > 180 or time < 0:
+            time = 10
         point = 1
         if current_key == key_input:
             # stting the current key immediately to x to prevent user from submitting multiple times and getting multiple points
