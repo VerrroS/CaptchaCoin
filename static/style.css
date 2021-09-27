@@ -320,6 +320,16 @@ form .btn {
   display: block;
 }
 
+#ban {
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background-color: #00000045;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .point {
     background-color: #b6ffb6;
 }
