@@ -46,7 +46,7 @@ def populate_shop():
     for i in range(6):
           id = i+ 13
           name = "desktop background"
-          price = 1
+          price = 0.3
           img = "/static/background_q.png"
           type = "png"
           duration = 0
