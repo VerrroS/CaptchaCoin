@@ -102,18 +102,9 @@ def work():
     time = 0
     avg_time = 0
     sucess_rate = 0
-    ban = False
     if work is not None:
         time = work.time
         avg_time = Work.query.filter_by(user_id = session["user_id"]).with_entities(func.avg(Work.time)).first()[0]
-        wrong_count = 0
-        wrong = Work.query.order_by(Work.timestamp.desc()).filter_by(user_id = session["user_id"]).all()
-        if len(wrong) >= BAN_COUNT:
-            for i in range(BAN_COUNT):
-                if wrong[i].success is False:
-                    wrong_count += 1
-        if wrong_count >= BAN_COUNT:
-            ban = True
         work_all =  Work.query.filter_by(user_id = session["user_id"]).all()
         success_count = 0
         for row in work_all:
@@ -123,7 +114,7 @@ def work():
     # Generate and write image
     data = image.generate(key)
     encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate, ban = ban)
+    return render_template("work.html", captcha = encoded_img_data.decode('utf-8'), cash = cash, time = time, avg_time = round(avg_time, 2), sucess_rate = sucess_rate)
 
 @app.route("/insights", methods=["GET"])
 @login_required

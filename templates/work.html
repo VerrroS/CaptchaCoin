@@ -32,12 +32,6 @@
 
     </div>
 
-    {% if ban is true %}
-    <div id="ban">
-      <h1>You are banned for 1 Minute</h1>
-    </div>
-    {% endif %}
-
     {% for category, message in get_flashed_messages(with_categories=true) %}
     <div class="alert {{category}}">{{ message }}</div>
     {% endfor %}
