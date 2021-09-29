@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session, send_from_directory
+from flask import Flask, flash, redirect, render_template, request, session, send_from_directory, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_session import Session
@@ -250,7 +250,7 @@ def items():
             download_id = request.form.get("download_id")
             download_item = Items.query.filter_by(_id = download_id).first()
             content = download_item.content
-            send_from_directory(app.static_folder, content, as_attachment=True)
+            send_file(app.static_folder, content, as_attachment=True)
         receiver_info = User.query.filter_by(public_key = receiver).first()
         if receiver_info is None:
             flash("This receiver does not exist", "error")
