@@ -27,7 +27,6 @@ def populate_shop():
         duration = 5
         edition = "%d/6" % (i+1)
         owner_id = 1
-        link = "https://veronikasimmering.de/mug_loop.mp4"
         new_data = Items(id, name, price, img, content, type, duration, edition, owner_id, link)
         db.session.add(new_data)
     for i in range(6):
@@ -40,7 +39,6 @@ def populate_shop():
         content = "shirt.jpg"
         edition = "%d/6" % (i+1)
         owner_id = 1
-        link = "https://veronikasimmering.de/shirt.jpg"
         new_data = Items(id, name, price, img, content, type, duration, edition, owner_id, link)
         db.session.add(new_data)
     for i in range(6):
@@ -53,7 +51,6 @@ def populate_shop():
           content = "background_q.png"
           owner_id = 1
           edition = "%d/6" % (i+1)
-          link = "https://veronikasimmering.de/background.png"
           new_data = Items(id, name, price, img, content,type, duration,edition, owner_id, link)
           db.session.add(new_data)
     db.session.commit()
