@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, render_template, request, session, send_from_directory, send_file
+from flask import Flask, flash, redirect, render_template, request, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_session import Session
@@ -238,6 +238,12 @@ def shop():
         return redirect("/items")
     return render_template("shop.html", inventory = inventory, rest = None)
 
+
+def send_file():
+    print(app.static_folder)
+    return send_from_directory(app.static_folder, "robot.jpg", as_attachment=True)
+
+
 @app.route("/items", methods=["GET", "POST"])
 def items():
     all_user = User.query.all()
@@ -245,12 +251,6 @@ def items():
     if request.method == "POST":
         ts = dt.now().timestamp()
         receiver = request.form.get("key")
-        # if User wants to download item
-        if receiver is None:
-            download_id = request.form.get("download_id")
-            download_item = Items.query.filter_by(_id = download_id).first()
-            content = download_item.content
-            send_file(app.static_folder, content, as_attachment=True)
         receiver_info = User.query.filter_by(public_key = receiver).first()
         if receiver_info is None:
             flash("This receiver does not exist", "error")
@@ -265,6 +265,14 @@ def items():
         db.session.commit()
         flash("Transaction successful", "success")
     return render_template("items.html", items = items, persons = all_user)
+
+
+@app.route("/download/<id>", methods=["GET", "POST"])
+def download():
+    download_id = request.form.get("download_id")
+    download_item = Items.query.filter_by(_id = download_id).first()
+    content = download_item.content
+    return send_from_directory(app.static_folder, "robot.jpg", as_attachment=True)
 
 @app.route("/about", methods=["GET", "POST"])
 def about():

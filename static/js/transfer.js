@@ -44,8 +44,8 @@ function display_matches(){
 
 function post_download(e){
   let id = this.dataset.id;
-  $.post( "/items", {
-    download_id: id
+  $.get( "/download/", {
+    download_id: "robot.jpg"
     });
 }
 
