@@ -32,7 +32,12 @@
                 <td>{{item.name}}</td>
                 <td>{{item.price | coins}} Coins</td>
                 <td>{{item.type}}</td>
-                <td><a href="{{item.link}}" download target="_blank">Download</a></td>
+                <td>
+                  <form action="/download" method="post">
+                    <input type="hidden" name="id" value="{{item._id}}">
+                      <input <button class="btn btn-secondary" type="submit" value="Download">
+                  </form>
+                </td>
                 <td><form action="/items" method="post">
                   <input type="text" name="key" placeholder="put in public key here" class="search">
                   <ul class="suggestions">

@@ -59,9 +59,9 @@ class Items(db.Model):
     duration = db.Column(db.Integer)
     edition = db.Column(db.String(100))
     owner_id = db.Column(db.Integer, default=0)
-    link = db.Column(db.String(100))
 
-    def __init__(self, _id, name, price, img, content, type, duration, edition, owner_id, link):
+
+    def __init__(self, _id, name, price, img, content, type, duration, edition, owner_id):
         self._id = _id
         self.name = name
         self.price = price
@@ -72,4 +72,3 @@ class Items(db.Model):
         self.edition = edition
         self.owner_id = owner_id
         self.owner_name = None
-        self.link = link

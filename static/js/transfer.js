@@ -40,6 +40,7 @@ function display_matches(){
     search.value = key;
   }
 
+
   search.addEventListener("change", display_matches);
   search.addEventListener("keyup", display_matches);
   results.forEach((item, i) => {
