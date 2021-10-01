@@ -267,12 +267,15 @@ def items():
     return render_template("items.html", items = items, persons = all_user)
 
 
-@app.route("/static/<id>", methods=["GET", "POST"])
+
+@app.route("/download", methods=["GET", "POST"])
 def download():
-    download_id = request.form.get("download_id")
+    download_id = request.form.get("id")
+    print(download_id)
     download_item = Items.query.filter_by(_id = download_id).first()
     content = download_item.content
-    return send_from_directory(app.static_folder, "robot.jpg", as_attachment=True)
+    return send_from_directory(app.static_folder, content, as_attachment=True)
+
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
