@@ -3,7 +3,6 @@ const suggestions = document.querySelector(".suggestions");
 const results = document.querySelectorAll(".person");
 const adress_btn = document.querySelector(".adress_btn");
 const adress = document.querySelector(".adress");
-const download_btn = document.querySelectorAll("#download");
 
 
 function display_matches(){
@@ -41,17 +40,6 @@ function display_matches(){
     search.value = key;
   }
 
-
-function post_download(e){
-  let id = this.dataset.id;
-  $.get( "/static/", {
-    download_id: "robot.jpg"
-    });
-}
-
-  download_btn.forEach((item, i) => {
-    item.addEventListener("click", post_download);
-  });
 
   search.addEventListener("change", display_matches);
   search.addEventListener("keyup", display_matches);
