@@ -267,7 +267,7 @@ def items():
     return render_template("items.html", items = items, persons = all_user)
 
 
-@app.route("/download/<id>", methods=["GET", "POST"])
+@app.route("/static/<id>", methods=["GET", "POST"])
 def download():
     download_id = request.form.get("download_id")
     download_item = Items.query.filter_by(_id = download_id).first()
