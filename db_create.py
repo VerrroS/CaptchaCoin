@@ -51,7 +51,7 @@ def populate_shop():
           content = "background_q.png"
           owner_id = 1
           edition = "%d/6" % (i+1)
-          new_data = Items(id, name, price, img, content,type, duration,edition, owner_id, link)
+          new_data = Items(id, name, price, img, content,type, duration,edition, owner_id)
           db.session.add(new_data)
     db.session.commit()
 populate_shop()
