@@ -154,6 +154,10 @@ list-style-type: none;
   font-size: 1rem;
 }
 
+.mobile .container h3{
+  font-size: 1.2rem;
+}
+
 .detail img {
   box-shadow: 0px 0px 8px 0px #6f6b6b6b;
   border-radius: none;

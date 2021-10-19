@@ -5,13 +5,22 @@
 {% endblock %}
 
 {% block main %}
+<div class="container">
+  <h3>
+    Captchacoin ia a web based application that lets you earn coins by solving captchas.
+    This fictitious crypto currency does not rely on computers proving their work but on 100% human work.
+    </h3>
+</div>
+
     <form action="/login" method="post">
         <label>Enter your wallet key</label>
         <input type="text" name="key">
-        <button type="submit" name="button" class="btn btn-secondary">Login</button>
+          <button type="submit" name="button" class="btn btn-secondary">Login</button>
+          <button href="/register" class="btn btn-primary">Create Account</button>
+
         {% if incorrect %}
              <p>Sorry, your key is incorrect</p>
-             <button href="/register" class="btn btn-secondary">Create Account</button>
+
         {% endif %}
     </form>
 
